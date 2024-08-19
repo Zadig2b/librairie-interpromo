@@ -12,7 +12,7 @@ export default function BookList() {
     useEffect(() => {
         async function fetchBooks() {
             try {
-                const response = await fetch('http://localhost:8001/api/livres');
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livres`);
                 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
