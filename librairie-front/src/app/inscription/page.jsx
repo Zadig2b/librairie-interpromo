@@ -123,6 +123,7 @@ export default function Inscription() {
                 </div>
 
                 <button type="submit" className="btn btn-primary">S'inscrire</button>
+                <button type="submit" className="btn btn-primary">S'inscrire</button>
             </form>
 
             {message && <p className="mt-3 text-success">{message}</p>}
@@ -130,3 +131,4 @@ export default function Inscription() {
         </div>
     );
 }
+
