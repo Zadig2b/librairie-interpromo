@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface as HasherUserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\PasswordHasher\UserPasswordHasherInterface;
 
 #[Route('/api', name: 'api_')]
 class ApiController extends AbstractController
@@ -19,35 +24,24 @@ class ApiController extends AbstractController
     #[Route('/livres', name: 'livres', methods: ['GET'])]
     public function getAllBooks(LivreRepository $livreRepository, SerializerInterface $serializer): JsonResponse
     {
-        // Fetch all books from the repository
         $livres = $livreRepository->findAll();
-
-        // Serialize the books to JSON format
         $jsonLivres = $serializer->serialize($livres, 'json', ['groups' => 'api_livre_methods']);
-
-        // Return the JSON response
         return new JsonResponse($jsonLivres, Response::HTTP_OK, [], true);
     }
 
     #[Route('/livre/{id}', name: 'livre_detail', methods: ['GET'])]
     public function getBookDetail(int $id, SerializerInterface $serializer, LivreRepository $livreRepository): JsonResponse
     {
-        // Fetch a specific book by ID
         $livre = $livreRepository->find($id);
 
         if (!$livre) {
-            // Return 404 if the book is not found
             return new JsonResponse(['error' => 'Book not found'], Response::HTTP_NOT_FOUND);
         }
 
-        // Serialize the book to JSON format
         $jsonLivre = $serializer->serialize($livre, 'json', ['groups' => 'api_livre_methods']);
-
-        // Return the JSON response
         return new JsonResponse($jsonLivre, Response::HTTP_OK, [], true);
     }
 
-    // Example of creating a new book
     #[Route('/livre/new', name: 'livre_new', methods: ['POST'])]
     public function createBook(
         Request $request,
@@ -55,7 +49,6 @@ class ApiController extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator
     ): JsonResponse {
-        // Deserialize JSON payload into Livre entity
         $livre = $serializer->deserialize(
             $request->getContent(),
             Livre::class,
@@ -63,7 +56,6 @@ class ApiController extends AbstractController
             ['groups' => 'api_livre_methods']
         );
 
-        // Validate the Livre entity
         $errors = $validator->validate($livre);
 
         if ($errors->count()) {
@@ -74,11 +66,92 @@ class ApiController extends AbstractController
             return $this->json($messages, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // Persist and flush Livre entity
         $em->persist($livre);
         $em->flush();
 
-        // Return success response
         return $this->json(['message' => 'Book saved successfully'], Response::HTTP_CREATED);
+    }
+    
+    #[Route('/login', name: 'login', methods: ['POST'])]
+    public function login(
+        Request $request,
+        HasherUserPasswordHasherInterface $passwordHasher,
+        UserRepository $userRepository
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'] ?? null;
+        $password = $data['password'] ?? null;
+
+        if (!$email || !$password) {
+            return new JsonResponse(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Load user by email
+        $user = $userRepository->findOneBy(['email' => $email]);
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Check password validity
+        if (!$passwordHasher->isPasswordValid($user, $password)) {
+            return new JsonResponse(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Normally, you would generate a JWT or session token here.
+        // For simplicity, this example just returns a success message.
+
+        return new JsonResponse(['message' => 'Login successful'], Response::HTTP_OK);
+    }
+
+    #[Route('/register', name: 'register', methods: ['POST'])]
+    public function register(
+        Request $request,
+        EntityManagerInterface $em,
+        HasherUserPasswordHasherInterface $passwordHasher,
+        ValidatorInterface $validator
+    ): JsonResponse {
+        // Decode the JSON request content
+        $data = json_decode($request->getContent(), true);
+
+        $email = $data['email'] ?? null;
+        $password = $data['password'] ?? null;
+        $prenom = $data['prenom'] ?? null;
+        $nom = $data['nom'] ?? null;
+
+        // Validate the required fields
+        if (!$email || !$password) {
+            return new JsonResponse(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Check if the user already exists
+        $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($existingUser) {
+            return new JsonResponse(['error' => 'User already exists'], Response::HTTP_CONFLICT);
+        }
+
+        // Create a new user entity
+        $user = new User();
+        $user->setEmail($email);
+        $user->setPassword($passwordHasher->hashPassword($user, $password));
+        $user->setPrenom($prenom);
+        $user->setNom($nom);
+
+        // Validate the new user entity
+        $errors = $validator->validate($user);
+        if ($errors->count()) {
+            $messages = [];
+            foreach ($errors as $error) {
+                $messages[] = $error->getMessage();
+            }
+            return $this->json($messages, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Persist and flush the user entity
+        $em->persist($user);
+        $em->flush();
+
+        // Return success response
+        return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
     }
 }
