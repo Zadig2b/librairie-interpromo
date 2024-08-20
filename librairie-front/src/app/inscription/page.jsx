@@ -6,11 +6,18 @@ export default function Inscription() {
     const [password, setPassword] = useState('');
     const [prenom, setPrenom] = useState('');
     const [nom, setNom] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Simple password confirmation check
+        if (password !== confirmPassword) {
+            setError("Passwords do not match!");
+            return;
+        }
 
         // Create a JSON object with the form data
         const formData = {
@@ -47,51 +54,79 @@ export default function Inscription() {
     };
 
     return (
-        <div>
+        <div className="container mt-5">
+            <h2 className="mb-4">Inscription</h2>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email :</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required 
-                />
+                <div className="mb-3">
+                    <label htmlFor="nom" className="form-label">Nom</label>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        id="nom" 
+                        placeholder="Entrez votre nom" 
+                        value={nom}
+                        onChange={(e) => setNom(e.target.value)}
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="prenom" className="form-label">Prénom</label>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        id="prenom" 
+                        placeholder="Entrez votre prénom" 
+                        value={prenom}
+                        onChange={(e) => setPrenom(e.target.value)}
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input 
+                        type="email" 
+                        className="form-control" 
+                        id="email" 
+                        placeholder="Entrez votre email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        className="form-control" 
+                        id="password" 
+                        placeholder="Entrez votre mot de passe" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="confirm-password" className="form-label">Confirmation du mot de passe</label>
+                    <input 
+                        type="password" 
+                        className="form-control" 
+                        id="confirm-password" 
+                        placeholder="Confirmez votre mot de passe" 
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required 
+                    />
+                </div>
 
-                <label htmlFor="password">Mot de passe :</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required 
-                />
+                <div className="mb-3 text-end">
+                    <a href="/#" className="link-secondary">Déjà un compte?</a>
+                </div>
 
-                <label htmlFor="prenom">Prénom :</label>
-                <input 
-                    type="text" 
-                    id="prenom" 
-                    name="prenom" 
-                    value={prenom}
-                    onChange={(e) => setPrenom(e.target.value)}
-                />
-
-                <label htmlFor="nom">Nom :</label>
-                <input 
-                    type="text" 
-                    id="nom" 
-                    name="nom" 
-                    value={nom}
-                    onChange={(e) => setNom(e.target.value)}
-                />
-
-                <button type="submit">S'inscrire</button>
+                <button type="submit" className="btn btn-primary">S'inscrire</button>
             </form>
 
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {message && <p className="mt-3 text-success">{message}</p>}
+            {error && <p className="mt-3 text-danger">{error}</p>}
         </div>
     );
 }
