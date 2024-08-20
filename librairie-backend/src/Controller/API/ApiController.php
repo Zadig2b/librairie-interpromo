@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface as HasherUserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\PasswordHasher\UserPasswordHasherInterface;
@@ -76,32 +77,33 @@ class ApiController extends AbstractController
     public function login(
         Request $request,
         HasherUserPasswordHasherInterface $passwordHasher,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        JWTTokenManagerInterface $jwtManager
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
-
+    
         if (!$email || !$password) {
             return new JsonResponse(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
         }
-
+    
         // Load user by email
         $user = $userRepository->findOneBy(['email' => $email]);
-
+    
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-
+    
         // Check password validity
         if (!$passwordHasher->isPasswordValid($user, $password)) {
             return new JsonResponse(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         }
-
-        // Normally, you would generate a JWT or session token here.
-        // For simplicity, this example just returns a success message.
-
-        return new JsonResponse(['message' => 'Login successful'], Response::HTTP_OK);
+    
+        // Generate JWT token
+        $token = $jwtManager->create($user);
+    
+        return new JsonResponse(['token' => $token], Response::HTTP_OK);
     }
 
     #[Route('/register', name: 'register', methods: ['POST'])]
