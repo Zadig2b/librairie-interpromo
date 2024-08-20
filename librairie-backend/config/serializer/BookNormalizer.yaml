@@ -1,0 +1,13 @@
+# config/serializer/BookNormalizer.yaml
+
+App\Entity\Livre:
+    properties:
+        categorie:
+            groups: ['api_livre_methods']
+
+App\Entity\Categorie:
+    properties:
+        id:
+            groups: ['api_livre_methods']
+        nom:
+            groups: ['api_livre_methods']

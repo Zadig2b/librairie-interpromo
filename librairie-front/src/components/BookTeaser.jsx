@@ -3,7 +3,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function BookTeaser({ book }) {
-  const { image, titre, editeur, genre, prix } = book;
+  const { image, titre, editeur, categorie, prix, auteur } = book;
+  console.log(book);
+  const categoryName = categorie?.nom || 'N/A';
 
   return (
     <div className="card mb-3" style={{ maxWidth: '540px' }}>
@@ -14,8 +16,8 @@ export default function BookTeaser({ book }) {
         <div className="col-md-8">
           <div className="card-body">
             <h5 className="card-title">{titre}</h5>
-            <p className="card-text"><strong>Éditeur:</strong> {editeur}</p>
-            <p className="card-text"><strong>Genre:</strong> {genre}</p>
+            <p className="card-text"><strong>Auteur:</strong> {auteur}</p>
+            <p className="card-text"><strong>Genre:</strong> {categoryName}</p>
             <p className="card-text"><strong>Prix:</strong> ${prix.toFixed(2)}</p>
           </div>
         </div>
