@@ -41,7 +41,7 @@ export default function BookList() {
             <ul className="list-unstyled">
                 {books.map(book => (
                     <li key={book.id} className="mb-3">
-                        <BookTeaser book={book} /> {/* Use BookTeaser component */}
+                        <BookTeaser book={book} /> 
                     </li>
                 ))}
             </ul>
