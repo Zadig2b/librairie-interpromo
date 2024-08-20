@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LivreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -51,6 +53,14 @@ class Livre
     #[ORM\Column(length: 500, nullable: true)]
     #[Groups(['api_livre_methods'])]
     private ?string $image = null;
+
+    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'book_id')]
+    private Collection $commandes;
+
+    public function __construct()
+    {
+        $this->commandes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -161,6 +171,33 @@ class Livre
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): static
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->addBookId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): static
+    {
+        if ($this->commandes->removeElement($commande)) {
+            $commande->removeBookId($this);
+        }
 
         return $this;
     }
