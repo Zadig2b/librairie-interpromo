@@ -19,12 +19,12 @@ export default function Navbar() {
               <Link href="/about" className="nav-link">À Propos</Link>
             </li>
             <li className="nav-item">
-              <Link href="/login" className="nav-link">Connexion</Link>
+              <Link href="/connexion" className="nav-link">Connexion</Link>
             </li>
           </ul>
           <div className="d-flex">
-            <button className="btn btn-outline-light me-2" type="button">Sign Up</button>
-            <button className="btn btn-outline-light" type="button">Login</button>
+            <a href="/inscription" className="btn btn-outline-light me-2">Sign Up</a>
+            <a href="/connexion" className="btn btn-outline-light me-2">Login</a>
           </div>
         </div>
       </div>

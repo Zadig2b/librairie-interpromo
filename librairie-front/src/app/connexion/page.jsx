@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function ConnexionPage() {
     return (
@@ -10,25 +10,25 @@ export default function ConnexionPage() {
                     <form action="/connexion" method="post">
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Email :</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                className="form-control" 
-                                required 
-                                placeholder="Entrez votre email" 
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                className="form-control"
+                                required
+                                placeholder="Entrez votre email"
                             />
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">Mot de passe :</label>
-                            <input 
-                                type="password" 
-                                id="password" 
-                                name="password" 
-                                className="form-control" 
-                                required 
-                                placeholder="Entrez votre mot de passe" 
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                className="form-control"
+                                required
+                                placeholder="Entrez votre mot de passe"
                             />
                         </div>
 
