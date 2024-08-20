@@ -1,20 +1,47 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function ConnexionPage() {
     return (
-        <div>
-            <form action="/connexion" method="post">
-                <label htmlFor="email">Email :</label>
-                <input type="email" id="email" name="email" required />
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <h2 className="text-center mb-4">Connexion</h2>
+                    <form action="/connexion" method="post">
+                        <div className="mb-3">
+                            <label htmlFor="email" className="form-label">Email :</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                className="form-control" 
+                                required 
+                                placeholder="Entrez votre email" 
+                            />
+                        </div>
 
-                <label htmlFor="password">Mot de passe :</label>
-                <input type="password" id="password" name="password" required />
+                        <div className="mb-3">
+                            <label htmlFor="password" className="form-label">Mot de passe :</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                className="form-control" 
+                                required 
+                                placeholder="Entrez votre mot de passe" 
+                            />
+                        </div>
 
-                <a href="/motdepasse_oublie">Mot de passe oublié ?</a>
+                        <div className="mb-3 text-end">
+                            <a href="/motdepasse_oublie" className="link-secondary">Mot de passe oublié ?</a>
+                        </div>
 
-                <button type="submit">Se connecter</button>
-            </form>
+                        <div className="d-grid">
+                            <button type="submit" className="btn btn-primary btn-block">Se connecter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }
