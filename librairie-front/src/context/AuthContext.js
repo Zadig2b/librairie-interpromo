@@ -4,7 +4,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-import { decodeJwt } from '../utils/JwtUtils'; // Import the utility function
+import { decodeJwt } from '../utils/jwtUtils'; // Import the utility function
 
 const AuthContext = createContext(null);
 
