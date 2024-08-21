@@ -1,8 +1,11 @@
-// components/Navbar.jsx
+"use client"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'next/link'; // For client-side routing with Next.js
+import { useAuth } from '../context/AuthContext'; // Adjust the path as needed
 
 export default function Navbar() {
+  const { user, logout } = useAuth(); // Get user and logout function from AuthContext
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
@@ -19,12 +22,20 @@ export default function Navbar() {
               <Link href="/about" className="nav-link">À Propos</Link>
             </li>
             <li className="nav-item">
-              <Link href="/connexion" className="nav-link">Connexion</Link>
+              {user ? (
+                <a href="#" onClick={logout} className="nav-link">Déconnexion</a>
+              ) : (
+                <Link href="/login" className="nav-link">Connexion</Link>
+              )}
             </li>
           </ul>
           <div className="d-flex">
-            <a href="/inscription" className="btn btn-outline-light me-2">Sign Up</a>
-            <a href="/connexion" className="btn btn-outline-light me-2">Login</a>
+            {!user && (
+              <>
+                <Link href="/inscription" className="btn btn-outline-light me-2">Sign Up</Link>
+                <Link href="/login" className="btn btn-outline-light me-2">Login</Link>
+              </>
+            )}
           </div>
         </div>
       </div>
