@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,6 +17,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+    #[Groups(['api_user_methods'])]
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -28,9 +30,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+    #[Groups(['api_user_methods'])]
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;
+    #[Groups(['api_user_methods'])]
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nom = null;

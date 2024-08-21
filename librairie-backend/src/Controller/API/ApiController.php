@@ -14,9 +14,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface as HasherUserPasswordHasherInterface;
-
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 #[Route('/api', name: 'api_')]
 class ApiController extends AbstractController
@@ -154,5 +155,39 @@ class ApiController extends AbstractController
 
         // Return success response
         return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
+    }
+
+    // #[Route('/user/{id}', name: 'user_show', methods: ['GET'])]
+    // public function fetchUserById(int $id, UserRepository $userRepository, SerializerInterface $serializer): JsonResponse
+    // {
+    //     $user = $userRepository->find($id);
+
+    //     if (!$user) {
+    //         return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+    //     }
+
+    //     $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'api_user_methods']);
+    //     return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+    // }
+
+    #[Route('/user/me', name: 'get_user_data', methods: ['GET'])]
+    public function getUserData(TokenStorageInterface $tokenStorage, SerializerInterface $serializer): JsonResponse
+    {
+        $token = $tokenStorage->getToken();
+
+        if (!$token) {
+            return new JsonResponse(['error' => 'No token found'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (!$token->getUser()) {
+            return new JsonResponse(['error' => 'No user found in token'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $user = $token->getUser();
+
+        // Serialize user data
+        $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'api_user_methods']);
+
+        return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
 }

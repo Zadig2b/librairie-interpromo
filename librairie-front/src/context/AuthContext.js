@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
 
                 console.log(userData);
                 
-                // router.push('/dashboard'); // Redirect to a protected route after login
+                router.push('/'); // Redirect to a protected route after login
             } else {
                 const error = await response.json();
                 console.error('Login failed:', error.message);
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         Cookies.remove('token');
         setUser(null);
-        router.push('/login'); // Redirect to login page after logout
+        router.push('/'); // Redirect to login page after logout
     };
 
     return (
