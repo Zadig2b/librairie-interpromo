@@ -1,11 +1,14 @@
-// lib/axios.js
-import axios from 'axios';
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8001'
+      },
+    ],
+  }
+};
 
-const instance = axios.create({
-  baseURL: 'http://localhost:8000/api', // URL du back-end Symfony
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-export default instance;
+export default nextConfig;
