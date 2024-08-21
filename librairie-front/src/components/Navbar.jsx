@@ -21,13 +21,16 @@ export default function Navbar() {
             <li className="nav-item">
               <Link href="/about" className="nav-link">À Propos</Link>
             </li>
-            <li className="nav-item">
-              {user ? (
-                <a href="#" onClick={logout} className="nav-link">Déconnexion</a>
-              ) : (
-                <Link href="/login" className="nav-link">Connexion</Link>
-              )}
-            </li>
+            {user && (
+              <>
+                <li className="nav-item">
+                  <Link href="/account" className="nav-link">Mon Compte</Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/account/edit" className="nav-link">Modifier Mon Compte</Link>
+                </li>
+              </>
+            )}
           </ul>
           <div className="d-flex">
             {!user && (
@@ -35,6 +38,9 @@ export default function Navbar() {
                 <Link href="/inscription" className="btn btn-outline-light me-2">Sign Up</Link>
                 <Link href="/login" className="btn btn-outline-light me-2">Login</Link>
               </>
+            )}
+            {user && (
+              <button onClick={logout} className="btn btn-outline-light me-2">Logout</button>
             )}
           </div>
         </div>

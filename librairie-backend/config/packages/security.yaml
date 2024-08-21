@@ -16,7 +16,10 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-
+            # Make sure the firewall is stateless for JWT
+            stateless: true
+            # Enable JWT authentication
+            jwt: ~
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
