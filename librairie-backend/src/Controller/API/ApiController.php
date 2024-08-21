@@ -16,8 +16,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface as HasherUserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\PasswordHasher\UserPasswordHasherInterface;
+
 
 #[Route('/api', name: 'api_')]
 class ApiController extends AbstractController
@@ -72,37 +71,37 @@ class ApiController extends AbstractController
 
         return $this->json(['message' => 'Book saved successfully'], Response::HTTP_CREATED);
     }
-    
+
     #[Route('/login', name: 'login', methods: ['POST'])]
     public function login(
         Request $request,
         HasherUserPasswordHasherInterface $passwordHasher,
         UserRepository $userRepository,
-        JWTTokenManagerInterface $jwtManager
+        JWTTokenManagerInterface $jwtManager,
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
-    
+
         if (!$email || !$password) {
             return new JsonResponse(['error' => 'Email and password are required'], Response::HTTP_BAD_REQUEST);
         }
-    
+
         // Load user by email
         $user = $userRepository->findOneBy(['email' => $email]);
-    
+
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-    
+
         // Check password validity
         if (!$passwordHasher->isPasswordValid($user, $password)) {
             return new JsonResponse(['error' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         }
-    
+
         // Generate JWT token
         $token = $jwtManager->create($user);
-    
+
         return new JsonResponse(['token' => $token], Response::HTTP_OK);
     }
 
