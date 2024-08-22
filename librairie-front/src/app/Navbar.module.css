@@ -1,0 +1,16 @@
+.navbar-custom {
+    background-color: #54494B;
+  }
+  
+  .nav-link {
+    color: #FFFFFF; /*Couleur du texte par défaut*/
+  }
+  
+  .nav-link.active {
+    color: #BFE4FF; /*Couleur du texte actif*/
+  }
+  
+  .navbar-toggler-icon {
+    filter: invert(100%); /*Facultatif : Inversez la couleur de l'icône de bascule pour l'adapter à l'arrière-plan sombre.*/
+  }
+  
