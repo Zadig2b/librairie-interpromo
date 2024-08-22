@@ -190,4 +190,63 @@ class ApiController extends AbstractController
 
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
+
+    #[Route('/user/edit', name: 'update_user_data', methods: ['POST'])]
+    public function editUserData(
+        TokenStorageInterface $tokenStorage, 
+        Request $request, 
+        EntityManagerInterface $entityManager, 
+        SerializerInterface $serializer, 
+        ValidatorInterface $validator
+    ): JsonResponse {
+        $token = $tokenStorage->getToken();
+    
+        if (!$token) {
+            return new JsonResponse(['error' => 'No token found'], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        $user = $token->getUser();
+    
+        if (!$user || !$user instanceof User) {
+            return new JsonResponse(['error' => 'No user found in token'], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        // Récupérer et désérialiser les données de la requête
+        $data = json_decode($request->getContent(), true);
+    
+        if (!$data) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
+        }
+    
+        // Mettre à jour les informations de l'utilisateur
+        if (isset($data['email'])) {
+            $user->setEmail($data['email']);
+        }
+    
+        if (isset($data['prenom'])) {
+            $user->setPrenom($data['prenom']);
+        }
+    
+        if (isset($data['nom'])) {
+            $user->setNom($data['nom']);
+        }
+    
+        // Validation des données
+        $errors = $validator->validate($user);
+        if (count($errors) > 0) {
+            $errorsString = (string) $errors;
+            return new JsonResponse(['error' => $errorsString], Response::HTTP_BAD_REQUEST);
+        }
+    
+        // Persister les changements en base de données
+        $entityManager->persist($user);
+        $entityManager->flush();
+    
+        // Retourner l'utilisateur mis à jour
+        $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'api_user_methods']);
+    
+        return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+    }
+    
+
 }
