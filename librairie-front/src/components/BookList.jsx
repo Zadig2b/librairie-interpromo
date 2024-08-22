@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import BookTeaser from '../components/BookTeaser'; 
 
-export default function BookList() {
+export default function BookList(props) {
     // Etat pour gérer les données du livre
     const [books, setBooks] = useState([]);
     // État pour gérer les états de chargement et d’erreur
@@ -14,7 +14,9 @@ export default function BookList() {
         async function fetchBooks() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livres`);
-                
+                // TODO: créer de nouvelles routes en utilisant /${props.type}
+                // on voudra alors récupérer les derniers livres ajoutés par le libraire si type=new
+                //ou les livres rangés par catégorie si type=categorie
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
