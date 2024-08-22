@@ -1,11 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import BookTeaser from '../components/BookTeaser'; // Import BookTeaser component
+import BookTeaser from '../components/BookTeaser'; 
 
 export default function BookList() {
-    // State to hold book data
+    // Etat pour gérer les données du livre
     const [books, setBooks] = useState([]);
-    // State to handle loading and error states
+    // État pour gérer les états de chargement et d’erreur
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
