@@ -44,6 +44,24 @@ class ApiController extends AbstractController
         return new JsonResponse($jsonLivre, Response::HTTP_OK, [], true);
     }
 
+
+    #[Route('/categories', name: 'categories', methods: ['GET'])]
+    public function getCategories(SerializerInterface $serializer, CategorieRepository $categorieRepository): JsonResponse
+    {
+        // Find the category by its name
+        $categories = $categorieRepository->findAll();
+    
+        // If the category doesn't exist, return a 404 error
+        if (!$categories) {
+            return new JsonResponse(['error' => 'Categories not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        // Serialize the books
+        $jsonCategories = $serializer->serialize($categories, 'json', ['groups' => 'api_livre_methods']);
+    
+        return new JsonResponse($jsonCategories, Response::HTTP_OK, [], true);
+    }
+
     #[Route('/categorie/{nom}', name: 'book_by_cat_name', methods: ['GET'])]
     public function getBookByCatName(string $nom, SerializerInterface $serializer, LivreRepository $livreRepository, CategorieRepository $categorieRepository): JsonResponse
     {

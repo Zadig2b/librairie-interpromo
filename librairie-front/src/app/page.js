@@ -8,15 +8,32 @@ import { useState, useEffect } from 'react';
 
 export default function Home() {
   const nouveautés = "Nouveautés";
-  const categories = "Vos genres préférés";
+  const randomCategory = "Vos genres préférés";
     // Etat pour gérer les données du livre
     const [books, setBooks] = useState([]);
+    const [categories, setCategories] = useState([]);
     // État pour gérer les états de chargement et d’erreur
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     // Fetch books from the backend
     useEffect(() => {
+      async function fetchCategories() {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`);
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          
+          const data = await response.json();
+          setCategories(data);  // Update state with fetched data
+      } catch (error) {
+          setError(error.message);  // Update state with error message
+      } finally {
+          setLoading(false);  // Set loading to false once done
+      }       
+      }
+
         async function fetchBooks() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livres`);
@@ -35,13 +52,16 @@ export default function Home() {
                 setLoading(false);  // Set loading to false once done
             }
         }
-        
         fetchBooks();  // Call the fetch function
+        fetchCategories();
+
     }, []);  // Empty dependency array means this runs once when the component mounts
 
     // Render loading, error, or book list
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
+    // console.log(books);
+    
   return (
     <>
     <HeroHeader/>
@@ -59,29 +79,9 @@ export default function Home() {
         </section>
 
         <section className="mb-5">
-          <BookList type={categories}
-          booksprops={books}/> 
-        </section>
-
-        <section>
-          <h2 className="mb-4">Categories</h2>
-          <div className="row">
-            <div className="col-md-4">
-              <div className="card bg-light text-center p-3">
-                <h5 className="card-title">Fantasy</h5>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card bg-light text-center p-3">
-                <h5 className="card-title">Science Fiction</h5>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card bg-light text-center p-3">
-                <h5 className="card-title">Mystery</h5>
-              </div>
-            </div>
-          </div>
+          <BookList type={randomCategory}
+          booksprops={books}
+          categories={categories}/> 
         </section>
       </div>
     </>
