@@ -1,0 +1,70 @@
+.book-section {
+    margin-top: 50px; /* Espacement depuis le header */
+    padding: 0 20px; /* Padding sur les côtés */
+  }
+  
+  .section-title {
+    font-size: 2em; /* Taille de police pour le titre */
+    text-align: center; /* Centre le titre horizontalement */
+    margin-bottom: 40px; /* Espacement entre le titre et les images */
+  }
+  
+  .book-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes de largeur égale */
+    gap: 20px; /* Espacement entre les éléments */
+    list-style-type: none; /* Supprime les puces */
+    padding: 0; /* Supprime les padding par défaut */
+    margin: 0; /* Supprime les marges par défaut */
+  }
+  
+  .book-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  .book-item .image-container {
+    display: flex;
+    justify-content: center; /* Centre l'image horizontalement */
+    margin-bottom: 10px; /* Espacement sous l'image */
+  }
+  
+  .book-item img {
+    max-width: 100%; /* Ajuste l'image à la largeur du conteneur */
+    height: auto;
+  }
+  
+  .book-item .info-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .book-item .author {
+    margin: 0;
+  }
+  
+  .book-item .price {
+    margin: 0;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .filter-container {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .filter-container label {
+    margin-right: 15px;
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  
