@@ -57,9 +57,13 @@ class Livre
     #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'book_id')]
     private Collection $commandes;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -198,6 +202,18 @@ class Livre
         if ($this->commandes->removeElement($commande)) {
             $commande->removeBookId($this);
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

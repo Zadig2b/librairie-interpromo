@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\User;
+use App\Repository\CategorieRepository;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -42,6 +43,46 @@ class ApiController extends AbstractController
         $jsonLivre = $serializer->serialize($livre, 'json', ['groups' => 'api_livre_methods']);
         return new JsonResponse($jsonLivre, Response::HTTP_OK, [], true);
     }
+
+
+    #[Route('/categories', name: 'categories', methods: ['GET'])]
+    public function getCategories(SerializerInterface $serializer, CategorieRepository $categorieRepository): JsonResponse
+    {
+        // Find the category by its name
+        $categories = $categorieRepository->findAll();
+    
+        // If the category doesn't exist, return a 404 error
+        if (!$categories) {
+            return new JsonResponse(['error' => 'Categories not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        // Serialize the books
+        $jsonCategories = $serializer->serialize($categories, 'json', ['groups' => 'api_livre_methods']);
+    
+        return new JsonResponse($jsonCategories, Response::HTTP_OK, [], true);
+    }
+
+    #[Route('/categorie/{nom}', name: 'book_by_cat_name', methods: ['GET'])]
+    public function getBookByCatName(string $nom, SerializerInterface $serializer, LivreRepository $livreRepository, CategorieRepository $categorieRepository): JsonResponse
+    {
+        // Find the category by its name
+        $categorie = $categorieRepository->findOneBy(['nom' => $nom]);
+    
+        // If the category doesn't exist, return a 404 error
+        if (!$categorie) {
+            return new JsonResponse(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        // Find books associated with the category
+        $livres = $livreRepository->findBy(['categorie' => $categorie]);
+    
+        // Serialize the books
+        $jsonLivre = $serializer->serialize($livres, 'json', ['groups' => 'api_livre_methods']);
+    
+        return new JsonResponse($jsonLivre, Response::HTTP_OK, [], true);
+    }
+    
+
 
     #[Route('/livre/new', name: 'livre_new', methods: ['POST'])]
     public function createBook(
@@ -190,4 +231,63 @@ class ApiController extends AbstractController
 
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
+
+    #[Route('/user/edit', name: 'update_user_data', methods: ['POST'])]
+    public function editUserData(
+        TokenStorageInterface $tokenStorage, 
+        Request $request, 
+        EntityManagerInterface $entityManager, 
+        SerializerInterface $serializer, 
+        ValidatorInterface $validator
+    ): JsonResponse {
+        $token = $tokenStorage->getToken();
+    
+        if (!$token) {
+            return new JsonResponse(['error' => 'No token found'], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        $user = $token->getUser();
+    
+        if (!$user || !$user instanceof User) {
+            return new JsonResponse(['error' => 'No user found in token'], Response::HTTP_UNAUTHORIZED);
+        }
+    
+        // Récupérer et désérialiser les données de la requête
+        $data = json_decode($request->getContent(), true);
+    
+        if (!$data) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
+        }
+    
+        // Mettre à jour les informations de l'utilisateur
+        if (isset($data['email'])) {
+            $user->setEmail($data['email']);
+        }
+    
+        if (isset($data['prenom'])) {
+            $user->setPrenom($data['prenom']);
+        }
+    
+        if (isset($data['nom'])) {
+            $user->setNom($data['nom']);
+        }
+    
+        // Validation des données
+        $errors = $validator->validate($user);
+        if (count($errors) > 0) {
+            $errorsString = (string) $errors;
+            return new JsonResponse(['error' => $errorsString], Response::HTTP_BAD_REQUEST);
+        }
+    
+        // Persister les changements en base de données
+        $entityManager->persist($user);
+        $entityManager->flush();
+    
+        // Retourner l'utilisateur mis à jour
+        $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'api_user_methods']);
+    
+        return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+    }
+    
+
 }

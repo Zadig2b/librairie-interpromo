@@ -12,25 +12,35 @@ class BookFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+    $fantasyDescription = "Dragons, sorciers, aventure épique et machinations en tout genre, entrer en rêverie avec notre sélection 100% fantaisie";
+    $polarDescription = "Mystère, intrigue et enquête haletante, venez piocher dans nos recommandations, frissons et suspens garantie !";
+    $bdDescription="Plongez dans l'univers coloré et captivant de la bande dessinée, où chaque page raconte une histoire pleine d'aventures et d'émotions, à travers des dessins vivants et des dialogues percutants.";
+    $classiqueDescription = "Redécouvrez les chefs-d'œuvre intemporels de la littérature, des récits qui traversent les époques et continuent d'inspirer les générations. Une immersion dans la beauté des mots et la profondeur des idées.";
+    $sciFiDescription= "Voyagez au-delà des étoiles et explorez des mondes futuristes fascinants, où la technologie, l'exploration spatiale, et les réalités alternatives se mêlent pour défier l'imagination.";
     // Existing categories
     $fantaisie = new Categorie();
     $fantaisie->setNom('Fantaisie');
+    $fantaisie->setDescription($fantasyDescription);
     $manager->persist($fantaisie);
 
     $scienceFiction = new Categorie();
     $scienceFiction->setNom('Science-fiction');
+    $scienceFiction->setDescription($sciFiDescription);
     $manager->persist($scienceFiction);
 
     $polar = new Categorie();
     $polar->setNom('Polar');
+    $polar->setDescription($polarDescription);
     $manager->persist($polar);
 
     $bandeDessinee = new Categorie();
     $bandeDessinee->setNom('Bande Dessinée');
+    $bandeDessinee->setDescription($bdDescription);
     $manager->persist($bandeDessinee);
 
     $classique = new Categorie();
     $classique->setNom('Classique');
+    $classique->setDescription($classiqueDescription);
     $manager->persist($classique);
 
         // Create books
