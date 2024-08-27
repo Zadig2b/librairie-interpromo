@@ -33,9 +33,9 @@ export default function BookTeaser({ book }) {
         {/* Text Section: Title, Author, and Genre */}
         <div className="flex-grow-1 pe-3">
           <h5 className="card-title">{titre}</h5>
-          <p className="card-text">
+          <div className="card-text">
             <h5>{auteur}</h5>
-          </p>
+          </div>
           {categoryName !== "N/A" && (
             <p className="card-text">
               {categoryName}
@@ -45,8 +45,8 @@ export default function BookTeaser({ book }) {
 
         {/* Price Section */}
         <div className="d-flex align-items-start">
-          <p className="card-text mb-0">
-            <strong>${prix.toFixed(2)}</strong> 
+        <p className="card-text mb-0 fs-3  text-end" >
+        <strong>{prix.toFixed(2)}€</strong> 
           </p>
         </div>
       </div>

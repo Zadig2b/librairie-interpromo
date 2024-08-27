@@ -22,7 +22,7 @@ export default function Filter({ books, categories, setFilteredBooks }) {
   };
 
   return (
-    <div className="book-section">
+<div className="filter-section d-inline-block">
 
       {/* Catégorie Filtre avec des cases à cocher */}
       <div className="filter-container">

@@ -12,6 +12,7 @@ export default function BooksPage() {
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
+  const allBooks = "Nos Livres";
 
   // Fetch books and categories from the backend
   useEffect(() => {
@@ -53,13 +54,13 @@ export default function BooksPage() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="book-section">
-      <h1 className="section-title">Nos Livres</h1>
-      {/* Filter component */}
-      <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks}/>
+    <div className="book-section d-flex">
+            {/* Filter component */}
+            <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks}/>
+
 
       {/* BookList component */}
-    <BookList type="AllBooks" booksprops={filteredBooks} categories={categories} />
+    <BookList type={allBooks} booksprops={filteredBooks} categories={categories} />
     </div>
   );
 }

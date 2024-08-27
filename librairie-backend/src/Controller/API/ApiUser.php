@@ -130,7 +130,7 @@ class ApiUser extends AbstractController
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/user/edit', name: 'update_user_data', methods: ['POST'])]
+    #[Route('/edit', name: 'update_user_data', methods: ['POST'])]
     public function editUserData(
         TokenStorageInterface $tokenStorage, 
         Request $request, 

@@ -13,7 +13,7 @@ export default function BookList({ type, booksprops, categories }) {
     <div className="container">
       <h1>{type}</h1>
 
-      {type === "AllBooks" ? (
+      {type === "Nos Livres" ? (
         // Display all books
         <div className="row">
           {booksprops.map((book) => (
