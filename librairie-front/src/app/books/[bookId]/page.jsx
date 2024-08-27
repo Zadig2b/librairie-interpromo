@@ -1,10 +1,10 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { } from "../books/page.css";
+import { } from "../../books/page.css";
 
 
 
-export default function BookList() {
+export default function BookList(id) {
     // State to hold book data
     const [books, setBooks] = useState([]);
     // State to handle loading and error states
@@ -15,7 +15,7 @@ export default function BookList() {
     useEffect(() => {
         async function fetchBooks() {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livres`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livre/${id}`);
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
