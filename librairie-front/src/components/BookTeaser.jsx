@@ -2,6 +2,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useRouter } from 'next/navigation';
+import '@/app/books/page.css';
 
 export default function BookTeaser({ book }) {
   const { id, image, titre, editeur, categorie, prix, auteur } = book;
@@ -15,21 +16,19 @@ export default function BookTeaser({ book }) {
 
   return (
     <div 
-      className="card mb-3" 
+      className="card mb-2" 
       style={{ maxWidth: '540px', cursor: 'pointer' }} 
       onClick={handleClick} // Add onClick event
     >
-      <div className="row g-0">
-        <div className="col-md-12 d-flex flex-column align-items-center text-center">
+      <div className="row g-2">
+        <div className="col-md-12 d-flex flex-column align-items-start text-">
           {/* Image Section */}
-          <img src={image} alt={titre} className="img-fluid rounded mb-3" style={{ maxWidth: '200px', height: 'auto' }} />
-
-          {/* Content Section */}
+          <img src={book.image} alt={book.titre} className="book-image" />
           <div className="card-body">
-            <h5 className="card-title">{titre}</h5>
-            <p className="card-text"><strong>Auteur:</strong> {auteur}</p>
-            <p className="card-text"><strong>Genre:</strong> {categoryName}</p>
-            <p className="card-text"><strong>Prix:</strong> ${prix.toFixed(2)}</p>
+            <h6 className="card-title">{book.titre}</h6>
+            <p className="card-text"><strong>Auteur:</strong> {book.auteur}</p>
+            <p className="card-text"><strong>Genre:</strong> {book.categoryName}</p>
+            <p className="price"><strong>Prix:</strong> ${book.prix.toFixed(2)}</p>
           </div>
         </div>
       </div>
