@@ -62,28 +62,23 @@ export default function Home() {
     if (error) return <p>Error: {error}</p>;
     // console.log(books);
     
-  return (
-    <>
-    <HeroHeader/>
-    <div className="container mt-5 d-flex justify-content-center align-items-center" >
-    <header className="text-center mb-5">
-          <h1>Welcome to Our Online Bookstore</h1>
-          <p className="lead">Find and reserve your favorite books online</p>
-        </header>
-
-
-
-        <section className="mb-5">
-          <BookList type={nouveautés}
-          booksprops={books}/> 
-        </section>
-
-        <section className="mb-5">
-          <BookList type={randomCategory}
-          booksprops={books}
-          categories={categories}/> 
-        </section>
-      </div>
-    </>
-  );
+    return (
+      <>
+        <HeroHeader />
+        <div className="container mt-5">
+          <header className="text-center mb-5">
+            <h1>Welcome to Our Online Bookstore</h1>
+            <p className="lead">Find and reserve your favorite books online</p>
+          </header>
+  
+          <section className="mb-5">
+            <BookList type={nouveautés} booksprops={books} />
+          </section>
+  
+          <section className="mb-5">
+            <BookList type={randomCategory} booksprops={books} categories={categories} />
+          </section>
+        </div>
+      </>
+    );
 }
