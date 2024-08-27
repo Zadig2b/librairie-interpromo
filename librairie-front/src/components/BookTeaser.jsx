@@ -6,12 +6,12 @@ import '@/app/books/page.css';
 
 export default function BookTeaser({ book }) {
   const { id, image, titre, editeur, categorie, prix, auteur } = book;
-  const categoryName = categorie?.nom || 'N/A';
-  const router = useRouter(); // Initialize useRouter
+  const categoryName = categorie?.nom || "N/A";
+  const router = useRouter(); // Initialiser useRouter
 
-  // Handle click to navigate to book details page
+  // Gérez le clic pour accéder à la page de détails du livre
   const handleClick = () => {
-    router.push(`/books/${id}`); // Navigate to the book details page
+    router.push(`/books/${id}`); // Accédez à la page de détails du livre
   };
 
   return (

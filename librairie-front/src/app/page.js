@@ -37,25 +37,23 @@ export default function Home() {
         async function fetchBooks() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livres`);
-                // TODO: créer de nouvelles routes en utilisant /${props.type}
-                // on voudra alors récupérer les derniers livres ajoutés par le libraire si type=new
-                //ou les livres rangés par catégorie si type=categorie
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 
                 const data = await response.json();
-                setBooks(data);  // Update state with fetched data
+                setBooks(data);  // Mettre à jour l'état avec les données récupérées
             } catch (error) {
-                setError(error.message);  // Update state with error message
+                setError(error.message);  // Mettre à jour l'état avec un message d'erreur
             } finally {
-                setLoading(false);  // Set loading to false once done
+                setLoading(false);  // Définir le chargement sur false une fois terminé
             }
         }
-        fetchBooks();  // Call the fetch function
+        fetchBooks();  // Appelez la fonction fetch
         fetchCategories();
 
-    }, []);  // Empty dependency array means this runs once when the component mounts
+    }, []);  // Un tableau de dépendances vide signifie qu'il s'exécute une fois lorsque le composant est monté
 
     // Render loading, error, or book list
     if (loading) return <p>Loading...</p>;
