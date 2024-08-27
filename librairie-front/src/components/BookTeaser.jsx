@@ -16,34 +16,37 @@ export default function BookTeaser({ book }) {
   return (
     <div
       className="card mb-3"
-      style={{ maxWidth: "540px", cursor: "pointer" }}
-      onClick={handleClick} //Ajouter un événement onClick
+      style={{ maxWidth: "300px", cursor: "pointer" }}
+      onClick={handleClick} // Add onClick event
     >
-      <div className="row g-0">
-        <div className="col-md-12 d-flex flex-column align-items-center text-center">
-          {/* Image Section */}
-          <img
-            src={image}
-            alt={titre}
-            className="img-fluid rounded mb-3"
-            style={{ maxWidth: "200px", height: "auto" }}
-          />
+      {/* Image Section */}
+      <img
+        src={image}
+        alt={titre}
+        className="card-img-top"
+        style={{ maxWidth: "100%", height: "auto" }} // Ensure the image spans full width of the card
+      />
 
-          {/* Content Section */}
-          <div className="card-body">
-            <h5 className="card-title">{titre}</h5>
+      {/* Content Section */}
+      <div className="card-body d-flex" style={{ maxWidth: "100%" }}>
+        {/* Text Section: Title, Author, and Genre */}
+        <div className="flex-grow-1 pe-3">
+          <h5 className="card-title">{titre}</h5>
+          <p className="card-text">
+            <h5>{auteur}</h5>
+          </p>
+          {categoryName !== "N/A" && (
             <p className="card-text">
-              <strong>Auteur:</strong> {auteur}
+              {categoryName}
             </p>
-            {categoryName!="N/A" && (
-              <p className="card-text">
-                <strong>Genre:</strong> {categoryName}
-              </p>
-            )}
-            <p className="card-text">
-              <strong>Prix:</strong> ${prix.toFixed(2)}
-            </p>
-          </div>
+          )}
+        </div>
+
+        {/* Price Section */}
+        <div className="d-flex align-items-start">
+          <p className="card-text mb-0">
+            <strong>${prix.toFixed(2)}</strong> 
+          </p>
         </div>
       </div>
     </div>

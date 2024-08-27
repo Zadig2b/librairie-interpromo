@@ -39,7 +39,7 @@ export default function Navbar() {
                   <Link href="/account" className="nav-link">Mon Compte</Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/account/edit" className="nav-link">Modifier Mon Compte</Link>
+                  <Link href="/account/reservations" className="nav-link">Mes Réservations</Link>
                 </li>
               </>
             )}

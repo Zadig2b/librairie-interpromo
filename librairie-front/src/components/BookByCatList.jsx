@@ -17,40 +17,37 @@ export default function BookByCatList({ categorie }) {
         async function fetchBooks() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categorie/${nom}`);
-                // TODO: créer de nouvelles routes en utilisant /${props.type}
-                // on voudra alors récupérer les derniers livres ajoutés par le libraire si type=new
-                //ou les livres rangés par catégorie si type=categorie
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 
                 const data = await response.json();
-                setBooks(data);  // Update state with fetched data
+                setBooks(data);  // Mettre à jour l'état avec les données récupérées
             } catch (error) {
-                setError(error.message);  // Update state with error message
+                setError(error.message);  // Mettre à jour l'état avec un message d'erreur
             } finally {
-                setLoading(false);  // Set loading to false once done
+                setLoading(false);  // Définir le chargement sur false une fois terminé
             }
         }
         
-        fetchBooks();  // Call the fetch function
-    }, []);  // Empty dependency array means this runs once when the component mounts
+        fetchBooks();  // Appelez la fonction fetch
+    }, []);  // Un tableau de dépendances vide signifie qu'il s'exécute une fois lorsque le composant est monté
 
-    // Render loading, error, or book list
+    // Chargement du rendu, erreur ou liste de livres
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
     return (
         <div className="container">
             <h3>{categorie.nom}</h3>
             <h5>{categorie.description || 'No description available.'}</h5>
-            <ul className="list-unstyled">
-                {books?.map(book => (
-                    <li key={book.id} className="mb-3">
+            <div className="row">
+            {books?.map(book => (
+              <div key={book.id} className="col-md-4 mb-4">
                         <BookTeaser book={book} />
-                    </li>
+                    </div>
                 ))}
-            </ul>
-        </div>
+              </div>
+              </div>
     );
 }
 

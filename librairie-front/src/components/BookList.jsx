@@ -15,27 +15,27 @@ export default function BookList({ type, booksprops, categories }) {
 
       {type === "AllBooks" ? (
         // Display all books
-        <ul className="list-unstyled">
+        <div className="row">
           {booksprops.map((book) => (
-            <li key={book.id} className="mb-3">
+            <div key={book.id} className="col-md-4 mb-4">
               <BookTeaser book={book} />
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : type === "Nouveautés" ? (
         // Display the 3 most recent books
-        <ul className="list-unstyled">
+        <div className="row">
           {booksprops
             ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort by date, most recent first
             .slice(0, 3) // Take only the first 3 books
             .map((book) => (
-              <li key={book.id} className="mb-3">
+              <div key={book.id} className="col-md-4 mb-4">
                 <BookTeaser book={book} />
-              </li>
+              </div>
             ))}
-        </ul>
+        </div>
       ) : (
-        // Logic for categories if the type is not "Nouveautés" or "AllBooks"
+        // Logique pour les catégories si le type n'est pas "Nouveautés" ou "AllBooks"
         (() => {
           // Vérifiez si les catégories sont définies et non vides
           if (!categories || categories.length === 0) {
@@ -46,7 +46,7 @@ export default function BookList({ type, booksprops, categories }) {
           const randomIndex = Math.floor(Math.random() * categories.length);
           const randomCategory = categories[randomIndex];
 
-          // Assurez-vous que randomCategory est valide avant le rendu
+          // on s'assure que randomCategory est valide avant le rendu
           if (!randomCategory) {
             return <div>Selected category is not available</div>;
           }

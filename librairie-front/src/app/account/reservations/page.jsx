@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
+import { useAuth } from '../../../context/AuthContext'; 
 import Cookies from 'js-cookie';
 import BookTeaser from '@/components/BookTeaser';
 
@@ -9,7 +9,7 @@ export default function MesReservations() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { user } = useAuth(); // Retrieve user data from AuthContext
+    const { user } = useAuth(); // Récupérer les données utilisateur de AuthContext
 
     useEffect(() => {
         const fetchOrders = async () => {
