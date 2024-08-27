@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Filter from '@/components/Filter';
 import BookList from '@/components/BookList';
+import '@/app/books/page.css';
 
 export default function BooksPage() {
   // State to hold book data

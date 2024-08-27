@@ -1,7 +1,8 @@
 // components/BookTeaser.jsx
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useRouter } from "next/navigation";
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useRouter } from 'next/navigation';
+import '@/app/books/page.css';
 
 export default function BookTeaser({ book }) {
   const { id, image, titre, editeur, categorie, prix, auteur } = book;
