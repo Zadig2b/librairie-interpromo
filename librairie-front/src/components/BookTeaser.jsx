@@ -1,13 +1,24 @@
 // components/BookTeaser.jsx
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useRouter } from 'next/navigation';
 
 export default function BookTeaser({ book }) {
-  const { image, titre, editeur, categorie, prix, auteur } = book;
+  const { id, image, titre, editeur, categorie, prix, auteur } = book;
   const categoryName = categorie?.nom || 'N/A';
+  const router = useRouter(); // Initialize useRouter
+
+  // Handle click to navigate to book details page
+  const handleClick = () => {
+    router.push(`/books/${id}`); // Navigate to the book details page
+  };
 
   return (
-    <div className="card mb-3" style={{ maxWidth: '540px' }}>
+    <div 
+      className="card mb-3" 
+      style={{ maxWidth: '540px', cursor: 'pointer' }} 
+      onClick={handleClick} // Add onClick event
+    >
       <div className="row g-0">
         <div className="col-md-12 d-flex flex-column align-items-center text-center">
           {/* Image Section */}

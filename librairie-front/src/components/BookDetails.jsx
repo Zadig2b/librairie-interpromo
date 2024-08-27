@@ -1,6 +1,6 @@
 // components/BookDetails.jsx
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const BookDetails = ({ book }) => {
@@ -31,17 +31,17 @@ const BookDetails = ({ book }) => {
 };
 
 // Define PropTypes for the component
-BookDetails.propTypes = {
-  book: PropTypes.shape({
-    titre: PropTypes.string.isRequired,
-    auteur: PropTypes.string.isRequired,
-    editeur: PropTypes.string.isRequired,
-    datePublication: PropTypes.string,
-    description: PropTypes.string,
-    quantite: PropTypes.number.isRequired,
-    prix: PropTypes.number.isRequired,
-    image: PropTypes.string
-  }).isRequired
-};
+// BookDetails.propTypes = {
+//   book: PropTypes.shape({
+//     titre: PropTypes.string.isRequired,
+//     auteur: PropTypes.string.isRequired,
+//     editeur: PropTypes.string.isRequired,
+//     datePublication: PropTypes.string,
+//     description: PropTypes.string,
+//     quantite: PropTypes.number.isRequired,
+//     prix: PropTypes.number.isRequired,
+//     image: PropTypes.string
+//   }).isRequired
+// };
 
 export default BookDetails;
