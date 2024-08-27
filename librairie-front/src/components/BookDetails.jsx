@@ -1,11 +1,55 @@
-// components/BookDetails.jsx
-import React from 'react';
-// import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
+import Cookies from 'js-cookie';
 
 const BookDetails = ({ book }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
   // Destructure book details from props
-  const { titre, auteur, editeur, datePublication, description, quantite, prix, image } = book;
+  const { titre, auteur, editeur, datePublication, description, quantite, prix, image, id } = book;
+
+  // Retrieve user data from AuthContext
+  const { user } = useAuth();
+
+  const handleOrder = async () => {
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    try {
+      // Retrieve the token from cookies
+      const token = Cookies.get('token');
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/order/new`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+        },
+        body: JSON.stringify({
+          user_id: user?.id, // Get userId from AuthContext
+          livre_id: id
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      setSuccessMessage('Commande passée avec succès!');
+    } catch (error) {
+      setError(`Une erreur est survenue lors de la commande: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -23,25 +67,19 @@ const BookDetails = ({ book }) => {
           <p><strong>Description:</strong> {description}</p>
           <p><strong>Quantity:</strong> {quantite}</p>
           <p><strong>Price:</strong> ${prix.toFixed(2)}</p>
-          <button className="btn btn-primary">Commander</button>
+          <button 
+            className="btn btn-primary" 
+            onClick={handleOrder}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Processing...' : 'Commander'}
+          </button>
+          {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
+          {error && <div className="alert alert-danger mt-3">{error}</div>}
         </div>
       </div>
     </div>
   );
 };
-
-// Define PropTypes for the component
-// BookDetails.propTypes = {
-//   book: PropTypes.shape({
-//     titre: PropTypes.string.isRequired,
-//     auteur: PropTypes.string.isRequired,
-//     editeur: PropTypes.string.isRequired,
-//     datePublication: PropTypes.string,
-//     description: PropTypes.string,
-//     quantite: PropTypes.number.isRequired,
-//     prix: PropTypes.number.isRequired,
-//     image: PropTypes.string
-//   }).isRequired
-// };
 
 export default BookDetails;
