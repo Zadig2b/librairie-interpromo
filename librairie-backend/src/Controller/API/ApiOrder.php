@@ -30,48 +30,57 @@ class ApiOrder extends AbstractController
     public function createCommande(TokenStorageInterface $tokenStorage, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
+    
         // Vérifier que l'ID du livre est présent
         if (!isset($data['livre_id'])) {
             return new JsonResponse(['error' => 'Livre ID is required'], 400);
         }
-
+    
         // Récupérer l'utilisateur actuel
         $token = $tokenStorage->getToken();
-
+    
         if (!$token) {
             return new JsonResponse(['error' => 'No token found'], Response::HTTP_UNAUTHORIZED);
         }
-
+    
         if (!$token->getUser()) {
             return new JsonResponse(['error' => 'No user found in token'], Response::HTTP_UNAUTHORIZED);
         }
-
+    
         $user = $token->getUser();
-
+    
         if (!$user) {
             return new JsonResponse(['error' => 'User not authenticated'], 401); 
         }
-
+    
         // Récupérer le livre
         $livre = $this->entityManager->getRepository(Livre::class)->find($data['livre_id']);
-
+    
         if (!$livre) {
             return new JsonResponse(['error' => 'Livre not found'], 404); 
         }
-
-        // Créer une nouvelle commande
+    
+        // Check if there is enough quantity available
+        if ($livre->getQuantite() <= 0) {
+            return new JsonResponse(['error' => 'Not enough quantity available'], 400);
+        }
+    
+        // Create a new order
         $commande = new Commande();
         $commande->setUserId($user); // Set the User entity
         $commande->setStatut('en cours');
-
-        // Associer le livre à la commande
+    
+        // Associate the book with the order
         $commande->addBookId($livre);
-
-        // Persister et sauvegarder
+    
+        // Decrease the quantity of the book
+        $livre->setQuantite($livre->getQuantite() - 1); // Decrease by 1 or adjust as needed
+    
+        // Persist and save
         $this->entityManager->persist($commande);
+        $this->entityManager->persist($livre); // Persist the updated book
         $this->entityManager->flush();
-
+    
         return new JsonResponse([
             'message' => 'Commande créée avec succès',
             'commandeId' => $commande->getId(),
@@ -79,6 +88,8 @@ class ApiOrder extends AbstractController
             'statut' => $commande->getStatut(),
         ], 201); // CREATED status code
     }
+    
+
     #[Route('/orders', name: 'get_user_orders', methods: ['GET'])]
     public function getUserOrders(): JsonResponse
     {
