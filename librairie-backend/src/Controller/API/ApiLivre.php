@@ -112,5 +112,54 @@ class ApiLivre extends AbstractController
         // Return a success response
         return new JsonResponse(['message' => 'Book deleted successfully'], Response::HTTP_OK);
     } 
+    #[Route('/livre/edit/{id}', name: 'livre_edit', methods: ['PUT'])]
+    public function editBook(
+        int $id,
+        Request $request,
+        LivreRepository $livreRepository,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator
+    ): JsonResponse {
+        // Retrieve the book by its ID
+        $livre = $livreRepository->find($id);
 
+        // If the book doesn't exist, return a 404 error
+        if (!$livre) {
+            return new JsonResponse(['error' => 'Book not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Deserialize the request content to get the updated book data
+        $updatedLivre = $serializer->deserialize(
+            $request->getContent(),
+            Livre::class,
+            'json',
+            ['groups' => 'api_livre_methods']
+        );
+
+        // Update the book's properties
+        $livre->setTitre($updatedLivre->getTitre());
+        $livre->setAuteur($updatedLivre->getAuteur());
+        $livre->setEditeur($updatedLivre->getEditeur());
+        $livre->setDatePublication($updatedLivre->getDatePublication());
+        $livre->setDescription($updatedLivre->getDescription());
+        $livre->setQuantite($updatedLivre->getQuantite());
+        $livre->setPrix($updatedLivre->getPrix());
+        $livre->setImage($updatedLivre->getImage());
+
+        // Validate the updated book data
+        $errors = $validator->validate($livre);
+
+        if ($errors->count()) {
+            $messages = [];
+            foreach ($errors as $error) {
+                $messages[] = $error->getMessage();
+            }
+            return $this->json($messages, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Save the updated book
+        $this->entityManager->flush();
+
+        return $this->json(['message' => 'Book updated successfully'], Response::HTTP_OK);
+    }
 }
