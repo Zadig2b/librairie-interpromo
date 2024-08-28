@@ -1,5 +1,3 @@
-// context/AuthContext.js
-
 "use client"
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,14 +10,29 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const router = useRouter();
 
+    const logout = () => {
+        Cookies.remove('token');
+        setUser(null);
+        router.push('/'); // Redirect to login page after logout
+    };
+
     useEffect(() => {
-        // Check if the user is already logged in
         const token = Cookies.get('token');
         if (token) {
-            // Decode the JWT and set user
             try {
                 const userData = decodeJwt(token);
-                setUser(userData);
+                const currentTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+
+                if (userData.exp < currentTime) {
+                    // Token has expired, logout user
+                    logout();
+                } else {
+                    setUser(userData);
+
+                    // Set a timeout to log the user out when the token expires
+                    const expirationTime = (userData.exp - currentTime) * 1000; // Convert to milliseconds
+                    setTimeout(logout, expirationTime);
+                }
             } catch (error) {
                 console.error('Failed to decode token:', error);
                 Cookies.remove('token');
@@ -42,12 +55,14 @@ export const AuthProvider = ({ children }) => {
                 const { token } = await response.json();
                 Cookies.set('token', token, { expires: 7 }); // Store token in a cookie for 7 days
                 
-                // Decode the JWT and set user
                 const userData = decodeJwt(token);
                 setUser(userData);
 
-                console.log(userData);
-                
+                // Set a timeout to log the user out when the token expires
+                const currentTime = Math.floor(Date.now() / 1000);
+                const expirationTime = (userData.exp - currentTime) * 1000;
+                setTimeout(logout, expirationTime);
+
                 router.push('/'); // Redirect to a protected route after login
             } else {
                 const error = await response.json();
@@ -58,12 +73,6 @@ export const AuthProvider = ({ children }) => {
             console.error('An unexpected error occurred during login:', error);
             throw new Error('An unexpected error occurred during login.');
         }
-    };
-
-    const logout = () => {
-        Cookies.remove('token');
-        setUser(null);
-        router.push('/'); // Redirect to login page after logout
     };
 
     return (
