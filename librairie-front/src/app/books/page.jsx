@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Filter from '@/components/Filter';
 import BookList from '@/components/BookList';
 import '@/app/books/page.css';
+import { useAuth } from '../../context/AuthContext'; // Importer le contexte d'authentification
 
 export default function BooksPage() {
   // State to hold book data
@@ -13,6 +14,7 @@ export default function BooksPage() {
   const [categories, setCategories] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const allBooks = "Nos Livres";
+  const { user } = useAuth(); // Récupérer l'utilisateur connecté
 
   // Fetch books and categories from the backend
   useEffect(() => {
@@ -52,6 +54,8 @@ export default function BooksPage() {
   // Render loading, error, or book list
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+
+  console.log(user);
 
   return (
     <div className="book-section d-flex">

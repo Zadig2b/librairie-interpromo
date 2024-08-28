@@ -15,13 +15,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['api_user_methods'])]
     #[ORM\Column]
     private ?int $id = null;
     #[Groups(['api_user_methods'])]
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
-
+    
+    #[Groups(['api_user_methods'])]
     #[ORM\Column]
     private array $roles = [];
 

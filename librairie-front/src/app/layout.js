@@ -3,7 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/footer";
 import { AuthProvider } from '../context/AuthContext';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
