@@ -14,6 +14,13 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
+  const allBooks = "Nos Livres";
+  const { user } = useAuth(); // Récupérer l'utilisateur connecté
+
+  const handleDeleteBook = (deletedBookId) => {
+    setBooks(prevBooks => prevBooks.filter(book => book.id !== deletedBookId));
+    setFilteredBooks(prevFilteredBooks => prevFilteredBooks.filter(book => book.id !== deletedBookId));
+  };
 
   // Fetch books and categories from the backend
   useEffect(() => {
@@ -65,15 +72,7 @@ export default function BooksPage() {
 
 
       {/* BookList component */}
-      <BookList type="AllBooks" booksprops={currentBooks} categories={categories} />
-
-      {/* Pagination component */}
-      <Pagination
-        itemsPerPage={itemsPerPage}
-        totalItems={filteredBooks.length}
-        paginate={paginate}
-        currentPage={currentPage}
-      />
+    <BookList type={allBooks} booksprops={filteredBooks} categories={categories} handleDeleteBook={handleDeleteBook}/>
     </div>
   );
 }

@@ -1,7 +1,5 @@
 // src/app/page.js
 "use client"
-import Image from "next/image";
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
 import BookList from '../components/BookList'; // Import BookList component
 import HeroHeader from "@/components/HeroHeader";
 import { useState, useEffect } from 'react';
