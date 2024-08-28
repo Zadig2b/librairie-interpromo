@@ -3,7 +3,7 @@ import React from 'react';
 import BookTeaser from '../components/BookTeaser'; 
 import BookByCatList from '../components/BookByCatList';
 
-export default function BookList({ type, booksprops, categories }) {
+export default function BookList({ type, booksprops, categories, handleDeleteBook }) {
   // Rendre l'état de chargement ou d'erreur
   if (!booksprops) {
     return <div>Loading...</div>; 
@@ -19,16 +19,16 @@ export default function BookList({ type, booksprops, categories }) {
         <div className="row">
           {booksprops.map((book) => (
             <div key={book.id} className="col-md-4 mb-4">
-              <BookTeaser book={book} />
+              <BookTeaser book={book} onDelete={handleDeleteBook}/>
             </div>
           ))}
         </div>
       ) : type === "Nouveautés" ? (
-        // Display the 3 most recent books
+        // Afficher les 3 livres les plus récents
         <div className="row">
           {booksprops
-            ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort by date, most recent first
-            .slice(0, 3) // Take only the first 3 books
+            ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Trier par date, le plus récent en premier
+            .slice(0, 3) // Ne prendre que les 3 premiers livres
             .map((book) => (
               <div key={book.id} className="col-md-4 mb-4">
                 <BookTeaser book={book} />

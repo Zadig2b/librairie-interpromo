@@ -1,28 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useAuth } from "../context/AuthContext"; // Adjust the path as necessary
+import { useAuth } from "../context/AuthContext"; 
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import EditBookForm from "./admin/EditBookForm"; 
 
 const BookDetails = ({ book }) => {
+  const [bookData, setBookData] = useState(book); // Utiliser un état local pour les données du livre
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
-  // Destructure book details from props
-  const {
-    titre,
-    auteur,
-    editeur,
-    datePublication,
-    description,
-    quantite,
-    prix,
-    image,
-    id,
-  } = book;
-
-  // Retrieve user data from AuthContext
   const { user } = useAuth();
 
   const handleOrder = async () => {
@@ -31,7 +19,6 @@ const BookDetails = ({ book }) => {
     setSuccessMessage(null);
 
     try {
-      // Retrieve the token from cookies
       const token = Cookies.get("token");
       if (!token) {
         throw new Error("No token found");
@@ -43,11 +30,11 @@ const BookDetails = ({ book }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Inclure le jeton dans l'en-tête Autorisation
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            user_id: user?.id, // Récupérer l'ID utilisateur d'AuthContext
-            livre_id: id,
+            user_id: user?.id,
+            livre_id: bookData.id, // Utiliser bookData
           }),
         }
       );
@@ -64,14 +51,24 @@ const BookDetails = ({ book }) => {
       setIsLoading(false);
     }
   };
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSave = (updatedBook) => {
+    // Mettre à jour l'état local avec les nouvelles données du livre
+    setBookData(updatedBook);
+    setIsEditing(false); // Fermer le formulaire d'édition après la sauvegarde
+  };
+
   useEffect(() => {
     if (successMessage || error) {
       const timer = setTimeout(() => {
         setSuccessMessage(null);
         setError(null);
-      }, 2000);
+      }, 3000);
 
-      // Effacez le délai d'attente si le composant se démonte ou si les messages changent
       return () => clearTimeout(timer);
     }
   }, [successMessage, error]);
@@ -80,55 +77,59 @@ const BookDetails = ({ book }) => {
     position: 'fixed',
     bottom: '10px',
     right: '10px',
-    zIndex: 1050, 
+    zIndex: 1050,
     maxWidth: '300px',
   };
-  
+
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-md-12">
-          <h2>{titre}</h2>
+          <h2>{bookData.titre}</h2>
         </div>
         <hr className="my-4" style={{border: '5px solid #BFE4FF' }} />
         <div className="col-md-4" style={{ position: 'relative', paddingLeft: '10px', paddingRight: '150px' }}>
-          {image && <img src={image} alt={titre} className="img-fluid" />}
+          {bookData.image && <img src={bookData.image} alt={bookData.titre} className="img-fluid" />}
         </div>
         <div className="col-md-8 mt-5">
-          <div className="">
-            <strong>Auteur : </strong>
-            <span className="text-muted">{auteur}</span>
-          </div>
-          <div className="">
-            <strong>Editeur : </strong>
-            <span className="text-muted">{editeur}</span>
-          </div>
-          <div className="">
-            <strong>Date de publication : </strong>
-            <span>
-              {datePublication ? new Date(datePublication).getFullYear() : "N/A"}
-            </span>
-          </div>
-          <div className="mb-3">
-            <strong>Genre : </strong><span className="text-muted">Fantasy</span>
-            <span className="text-muted"></span>
-          </div>
-          <div>
-            <strong className="m-3"></strong> ${prix.toFixed(2)}
-          </div>
-          <button
-            className="btn btn-primary mt-3"
-            style={{ backgroundColor: '#BFE4FF', border: '5px solid black', borderRadius: '0'}}
-            onClick={handleOrder}
-            disabled={isLoading}
-          >
-            {isLoading ? "Processing..." : "Commander"}
-          </button>
-         
-          {/* <div>
-            <strong>Quantité:</strong> {quantite}
-          </div> */}
-         
+          {!isEditing ? (
+            <>
+              <div><strong>Auteur : </strong><span className="text-muted">{bookData.auteur}</span></div>
+              <div><strong>Editeur : </strong><span className="text-muted">{bookData.editeur}</span></div>
+              <div><strong>Date de publication : </strong><span>{bookData.datePublication ? new Date(bookData.datePublication).getFullYear() : "N/A"}</span></div>
+              <div><strong>Genre : </strong><span className="text-muted">Fantasy</span></div>
+              <div><strong>Prix : </strong> ${bookData.prix.toFixed(2)}</div>
+              {!user?.isAdmin && (
+                <button
+                  className="btn btn-primary mt-3"
+                  style={{
+                    backgroundColor: '#BFE4FF',
+                    border: '5px solid var(--primary-color)',
+                    borderRadius: '0',
+                    color: 'var(--primary-color)'
+                  }}
+                  onClick={handleOrder}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Processing..." : "Commander"}
+                </button>
+              )}
+              {user?.isAdmin && (
+                <button
+                  className="btn btn-secondary mt-3"
+                  onClick={handleEditToggle}
+                >
+                  Éditer
+                </button>
+              )}
+            </>
+          ) : (
+            <EditBookForm
+              book={bookData} // Passer bookData au lieu de book
+              onSave={handleSave}  // Passer la fonction handleSave
+              onCancel={handleEditToggle} // Fermer le formulaire en cas d'annulation
+            />
+          )}
           {successMessage && (
             <div className="alert alert-success mt-3" style={messageStyle}>
               {successMessage}
@@ -141,11 +142,9 @@ const BookDetails = ({ book }) => {
           )}
         </div>
         <div className="mt-3">
-            <strong>Résumer : </strong> 
-            <p>
-            {description}
-            </p>
-          </div>
+          <strong>Résumé : </strong>
+          <p>{bookData.description}</p>
+        </div>
       </div>
     </div>
   );

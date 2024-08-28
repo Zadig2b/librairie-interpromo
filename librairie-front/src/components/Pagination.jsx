@@ -1,102 +1,50 @@
 import React from 'react';
+import '@/app/books/page.css'; // Importez votre fichier de style si nécessaire
 
 const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
-  const pageNumbers = [];
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const pageNumbers = [];
 
-  // Générer les numéros de page
+  // Générer les numéros de pages
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
-  // Limiter l'affichage des numéros de page avec des ellipses
-  const renderPageNumbers = () => {
-    const maxPageNumbersToShow = 5; // Nombre maximal de numéros de page à afficher
-
-    if (totalPages <= maxPageNumbersToShow) {
-      return pageNumbers.map(number => (
-        <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
-          <button onClick={() => paginate(number)} className="page-link">
-            {number}
-          </button>
-        </li>
-      ));
-    }
-
-    const pages = [];
-    let startPage, endPage;
-
-    if (currentPage <= Math.ceil(maxPageNumbersToShow / 2)) {
-      startPage = 1;
-      endPage = maxPageNumbersToShow;
-    } else if (currentPage + Math.floor(maxPageNumbersToShow / 2) >= totalPages) {
-      startPage = totalPages - maxPageNumbersToShow + 1;
-      endPage = totalPages;
-    } else {
-      startPage = currentPage - Math.floor(maxPageNumbersToShow / 2);
-      endPage = currentPage + Math.floor(maxPageNumbersToShow / 2);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <li key={i} className={`page-item ${currentPage === i ? 'active' : ''}`}>
-          <button onClick={() => paginate(i)} className="page-link">
-            {i}
-          </button>
-        </li>
-      );
-    }
-
-    if (startPage > 1) {
-      pages.unshift(
-        <li key="first" className="page-item">
-          <button onClick={() => paginate(1)} className="page-link">1</button>
-        </li>,
-        <li key="start-ellipsis" className="page-item disabled">
-          <span className="page-link">...</span>
-        </li>
-      );
-    }
-
-    if (endPage < totalPages) {
-      pages.push(
-        <li key="end-ellipsis" className="page-item disabled">
-          <span className="page-link">...</span>
-        </li>,
-        <li key="last" className="page-item">
-          <button onClick={() => paginate(totalPages)} className="page-link">{totalPages}</button>
-        </li>
-      );
-    }
-
-    return pages;
-  };
-
   return (
-    <nav>
+    <nav className="pagination-container">
       <ul className="pagination">
-        {/* Bouton Précédent */}
+        {/* Flèche Précédente */}
         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
           <button
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}
             className="page-link"
           >
-            Précédent
+            <svg width="30" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+            </svg>
           </button>
         </li>
 
         {/* Numéros de page */}
-        {renderPageNumbers()}
+        {pageNumbers.map(number => (
+          <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+            <button onClick={() => paginate(number)} className="page-link">
+              {number}
+            </button>
+          </li>
+        ))}
 
-        {/* Bouton Suivant */}
+        {/* Flèche Suivante */}
         <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
           <button
             onClick={() => paginate(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="page-link"
           >
-            Suivant
+            <svg width="30" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+            </svg>
           </button>
         </li>
       </ul>
