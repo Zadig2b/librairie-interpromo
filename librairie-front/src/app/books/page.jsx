@@ -4,17 +4,17 @@ import Filter from '@/components/Filter';
 import BookList from '@/components/BookList';
 import '@/app/books/page.css';
 import { useAuth } from '../../context/AuthContext'; // Importer le contexte d'authentification
+import Pagination from '@/components/Pagination';
 
 export default function BooksPage() {
   // State to hold book data
   const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   // State to handle loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const allBooks = "Nos Livres";
-  const { user } = useAuth(); // Récupérer l'utilisateur connecté
 
   // Fetch books and categories from the backend
   useEffect(() => {
@@ -58,13 +58,24 @@ export default function BooksPage() {
   console.log(user);
 
   return (
-    <div className="book-section d-flex">
-            {/* Filter component */}
-            <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks}/>
+    <div className="book-section">
+      <h1 className="section-title">Nos Livres</h1>
+      {/* Filter component */}
+      <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks}/>
+
 
 
       {/* BookList component */}
-    <BookList type={allBooks} booksprops={filteredBooks} categories={categories} />
+      <BookList type="AllBooks" booksprops={currentBooks} categories={categories} />
+
+      {/* Pagination component */}
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItems={filteredBooks.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
     </div>
   );
 }
+
