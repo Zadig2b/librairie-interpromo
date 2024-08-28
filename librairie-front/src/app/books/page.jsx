@@ -14,7 +14,6 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [filteredBooks, setFilteredBooks] = useState([]);
 
   // Fetch books and categories from the backend
   useEffect(() => {
