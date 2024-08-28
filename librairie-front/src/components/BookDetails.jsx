@@ -87,42 +87,65 @@ const BookDetails = ({ book }) => {
   return (
     <div className="container mt-5">
       <div className="row">
-        <div className="col-md-4">
+        <div className="col-md-12">
+          <h2>{titre}</h2>
+        </div>
+        <hr className="my-4" style={{border: '5px solid #BFE4FF' }} />
+        <div className="col-md-4" style={{ position: 'relative', paddingLeft: '10px', paddingRight: '150px' }}>
           {image && <img src={image} alt={titre} className="img-fluid" />}
         </div>
-        <div className="col-md-8">
-          <h2>{titre}</h2>
-          <h4 className="text-muted">by {auteur}</h4>
-          <p>
-            <strong>Publisher:</strong> {editeur}
-          </p>
-          <p>
-            <strong>Publication Date:</strong>{" "}
-            {datePublication
-              ? new Date(datePublication).toLocaleDateString()
-              : "N/A"}
-          </p>
-          <p>
-            <strong>Description:</strong> {description}
-          </p>
-          <p>
-            <strong>Quantity:</strong> {quantite}
-          </p>
-          <p>
-            <strong>Price:</strong> ${prix.toFixed(2)}
-          </p>
+        <div className="col-md-8 mt-5">
+          <div className="">
+            <strong>Auteur : </strong>
+            <span className="text-muted">{auteur}</span>
+          </div>
+          <div className="">
+            <strong>Editeur : </strong>
+            <span className="text-muted">{editeur}</span>
+          </div>
+          <div className="">
+            <strong>Date de publication : </strong>
+            <span>
+              {datePublication ? new Date(datePublication).getFullYear() : "N/A"}
+            </span>
+          </div>
+          <div className="mb-3">
+            <strong>Genre : </strong><span className="text-muted">Fantasy</span>
+            <span className="text-muted"></span>
+          </div>
+          <div>
+            <strong className="m-3"></strong> ${prix.toFixed(2)}
+          </div>
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mt-3"
+            style={{ backgroundColor: '#BFE4FF', border: '5px solid black', borderRadius: '0'}}
             onClick={handleOrder}
             disabled={isLoading}
           >
             {isLoading ? "Processing..." : "Commander"}
           </button>
+         
+          {/* <div>
+            <strong>Quantité:</strong> {quantite}
+          </div> */}
+         
           {successMessage && (
-            <div className="alert alert-success mt-3"style={messageStyle}>{successMessage}</div>
+            <div className="alert alert-success mt-3" style={messageStyle}>
+              {successMessage}
+            </div>
           )}
-          {error && <div className="alert alert-danger mt-3"style={messageStyle}>{error}</div>}
+          {error && (
+            <div className="alert alert-danger mt-3" style={messageStyle}>
+              {error}
+            </div>
+          )}
         </div>
+        <div className="mt-3">
+            <strong>Résumer : </strong> 
+            <p>
+            {description}
+            </p>
+          </div>
       </div>
     </div>
   );

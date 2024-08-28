@@ -12,6 +12,7 @@ export default function BookList({ type, booksprops, categories }) {
   return (
     <div className="container">
       <h1>{type}</h1>
+      <hr className="my-4" style={{border: '5px solid #BFE4FF' }} />
 
       {type === "Nos Livres" ? (
         // Display all books
