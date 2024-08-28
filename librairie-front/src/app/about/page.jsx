@@ -7,9 +7,11 @@ export default function About() {
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>À propos</h1>
+            <hr className="my-4" style={{border: '5px solid #BFE4FF' }} />
+
 
             <p style={styles.paragraph}>
-                La plume des Ecrins vous attend patiemment au bourg d'Oisans. A proximité d'un cadre naturel époustouflant, venez faire le plein de littérature avant de partir à l'aventure braver mère nature. Bande dessinée, grands classique ou encore fantasy, notre collection hétéroclite sera vous ravir ! " L’équipe de la librairie.
+                " La plume des Ecrins vous attend patiemment au bourg d'Oisans. A proximité d'un cadre naturel époustouflant, venez faire le plein de littérature avant de partir à l'aventure braver mère nature. Bande dessinée, grands classique ou encore fantasy, notre collection hétéroclite sera vous ravir ! " L’équipe de la librairie.
             </p>
 
             <div style={styles.imageContainer}>
@@ -24,7 +26,8 @@ export default function About() {
 
             <div style={styles.contact}>
                 <h2>Contactez-nous</h2>
-                <p><strong>Adresse :</strong> 123 Rue de la Lecture, 75000 Paris, France</p>
+                <p><strong>Adresse :</strong> 25 rue Pierre Kropotkine
+                38 000 Grenoble, France</p>
                 <p><strong>Téléphone :</strong> +33 1 23 45 67 89</p>
             </div>
         </div>

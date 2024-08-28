@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext"; // Adjust the path as necessar
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 
+
 const BookDetails = ({ book }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -90,10 +91,14 @@ const BookDetails = ({ book }) => {
         <div className="col-md-12">
           <h2>{titre}</h2>
         </div>
-        <hr className="my-4" style={{border: '5px solid #BFE4FF' }} />
-        <div className="col-md-4" style={{ position: 'relative', paddingLeft: '10px', paddingRight: '150px' }}>
+        <hr className="" style={{border: '5px solid #BFE4FF' }} />
+        {/* <div className="col-md-4" style={{ position: 'relative', paddingLeft: '10px', paddingRight: '150px' }}>
           {image && <img src={image} alt={titre} className="img-fluid" />}
+        </div> */}
+        <div className="col-md-4">
+         {image && <img src={image} alt={titre} className="img-fluid" style={{ width: '503px', height: '412px' }} />}
         </div>
+
         <div className="col-md-8 mt-5">
           <div className="">
             <strong>Auteur : </strong>
