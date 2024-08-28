@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Filter from '@/components/Filter';
 import BookList from '@/components/BookList';
 import '@/app/books/page.css';
-import { useAuth } from '../../context/AuthContext'; // Importer le contexte d'authentification
 import Pagination from '@/components/Pagination';
 
 export default function BooksPage() {
@@ -14,7 +13,18 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [filteredBooks, setFilteredBooks] = useState([]);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  // Calculate current books to display based on pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBooks = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Function to change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Fetch books and categories from the backend
   useEffect(() => {
@@ -55,15 +65,11 @@ export default function BooksPage() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log(user);
-
   return (
     <div className="book-section">
       <h1 className="section-title">Nos Livres</h1>
       {/* Filter component */}
-      <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks}/>
-
-
+      <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks} />
 
       {/* BookList component */}
       <BookList type="AllBooks" booksprops={currentBooks} categories={categories} />
@@ -78,4 +84,3 @@ export default function BooksPage() {
     </div>
   );
 }
-
