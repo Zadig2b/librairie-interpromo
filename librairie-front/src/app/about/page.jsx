@@ -9,7 +9,7 @@ export default function About() {
             <h1 style={styles.title}>À propos</h1>
 
             <p style={styles.paragraph}>
-                La plume des Ecrins vous attend patiemment au bourg d'Oisans. A proximité d'un cadre naturel époustouflant, venez faire le plein de littérature avant de partir à l'aventure braver mère nature. Bande dessinée, grands classique ou encore fantasy, notre collection hétéroclite sera vous ravir ! " L’équipe de la librarie.
+                La plume des Ecrins vous attend patiemment au bourg d'Oisans. A proximité d'un cadre naturel époustouflant, venez faire le plein de littérature avant de partir à l'aventure braver mère nature. Bande dessinée, grands classique ou encore fantasy, notre collection hétéroclite sera vous ravir ! " L’équipe de la librairie.
             </p>
 
             <div style={styles.imageContainer}>
