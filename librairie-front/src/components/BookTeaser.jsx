@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import '@/app/books/page.css';
 
 export default function BookTeaser({ book, onDelete }) {
-  const { id, image, titre, editeur, categorie, prix, auteur } = book;
+  const { id, image, titre, editeur, categorie, prix, auteur, quantite } = book;
   const categoryName = categorie?.nom || "N/A";
   const router = useRouter();
   const { user } = useAuth();
@@ -68,25 +68,33 @@ export default function BookTeaser({ book, onDelete }) {
         onClick={handleClick}
       />
 
-      <div className="card-body d-flex" style={{ maxWidth: "100%" }}>
-        <div className="flex-grow-1 pe-3">
-          <h5 className="card-title">{titre}</h5>
-          <div className="card-text">
-            <h5>{auteur}</h5>
-          </div>
-          {categoryName !== "N/A" && (
-            <p className="card-text">
-              {categoryName}
-            </p>
-          )}
-        </div>
+<div className="card-body d-flex" style={{ maxWidth: "100%" }}>
+  <div className="flex-grow-1 pe-3">
+    <h5 className="card-title">{titre}</h5>
+    <div className="card-text">
+      <h5>{auteur}</h5>
+    </div>
+    {categoryName !== "N/A" && (
+      <p className="card-text">
+        {categoryName}
+      </p>
+    )}
+  </div>
 
-        <div className="d-flex align-items-start">
-          <p className="card-text mb-0 fs-3 text-end">
-            <strong>{prix.toFixed(2)}€</strong>
-          </p>
-        </div>
-      </div>
+  <div className="d-flex">
+    <p className="card-text mb-0 fs-5 text-end" style={{ display: 'flex' }}>
+      {user?.roles.includes('ROLE_ADMIN') ? (
+        <>
+          <span style={{ marginRight: '0.5rem' }}>Stock:</span>
+          <strong>{quantite}</strong>
+        </>
+      ) : (
+        <strong>{prix.toFixed(2)}€</strong>
+      )}
+    </p>
+  </div>
+</div>
+
 
       {user?.roles.includes('ROLE_ADMIN') && (
         <div className="d-flex justify-content-end">

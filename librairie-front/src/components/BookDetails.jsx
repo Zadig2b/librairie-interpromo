@@ -117,13 +117,20 @@ const BookDetails = ({ book }) => {
             <strong className="m-3"></strong> ${prix.toFixed(2)}
           </div>
           <button
-            className="btn btn-primary mt-3"
-            style={{ backgroundColor: '#BFE4FF', border: '5px solid black', borderRadius: '0'}}
-            onClick={handleOrder}
-            disabled={isLoading}
-          >
-            {isLoading ? "Processing..." : "Commander"}
-          </button>
+  className="btn btn-primary mt-3"
+  style={{
+    backgroundColor: '#BFE4FF',
+    border: `5px solid var(--primary-color)`, // Use the CSS variable for border color
+    borderRadius: '0',
+    color: 'var(--primary-color)'  // Use the CSS variable for text color
+  }}
+  onClick={handleOrder}
+  disabled={isLoading}
+>
+  {isLoading ? "Processing..." : "Commander"}
+</button>
+
+
          
           {/* <div>
             <strong>Quantité:</strong> {quantite}
