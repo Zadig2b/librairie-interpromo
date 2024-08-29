@@ -119,10 +119,9 @@ export default function Inscription() {
                 </div>
 
                 <div className="mb-3 text-end">
-                    <a href="/#" className="link-secondary">Déjà un compte?</a>
+                    <a href="/login" className="link-secondary">Déjà un compte?</a>
                 </div>
 
-                <button type="submit" className="btn btn-primary">S'inscrire</button>
                 <button type="submit" className="btn btn-primary">S'inscrire</button>
             </form>
 

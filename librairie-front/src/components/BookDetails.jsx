@@ -99,7 +99,7 @@ const BookDetails = ({ book }) => {
               <div><strong>Date de publication : </strong><span>{bookData.datePublication ? new Date(bookData.datePublication).getFullYear() : "N/A"}</span></div>
               <div><strong>Genre : </strong><span className="text-muted">Fantasy</span></div>
               <div><strong>Prix : </strong> ${bookData.prix.toFixed(2)}</div>
-              {!user?.isAdmin && (
+              {!user?.isAdmin() && (
                 <button
                   className="btn btn-primary mt-3"
                   style={{
@@ -114,7 +114,7 @@ const BookDetails = ({ book }) => {
                   {isLoading ? "Processing..." : "Commander"}
                 </button>
               )}
-              {user?.isAdmin && (
+              {user?.isAdmin() && (
                 <button
                   className="btn btn-secondary mt-3"
                   onClick={handleEditToggle}
