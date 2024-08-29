@@ -14,6 +14,11 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Define the number of items per page
+  
   const allBooks = "Nos Livres";
   const { user } = useAuth(); // Récupérer l'utilisateur connecté
 
@@ -57,23 +62,34 @@ export default function BooksPage() {
     fetchBooks();
   }, []);
 
+  // Handle page changes
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Calculate the items to display on the current page
+  const indexOfLastBook = currentPage * itemsPerPage;
+  const indexOfFirstBook = indexOfLastBook - itemsPerPage;
+  const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+
   // Render loading, error, or book list
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-  console.log(user);
 
   return (
     <div className="book-section">
       <h1 className="section-title">Nos Livres</h1>
       {/* Filter component */}
-      <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks}/>
-
-
+      <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks} />
 
       {/* BookList component */}
-    <BookList type={allBooks} booksprops={filteredBooks} categories={categories} handleDeleteBook={handleDeleteBook}/>
+      <BookList type={allBooks} booksprops={currentBooks} categories={categories} handleDeleteBook={handleDeleteBook} />
+
+      {/* Pagination component */}
+      <Pagination
+        itemsPerPage={itemsPerPage}
+        totalItems={filteredBooks.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
     </div>
   );
 }
-
