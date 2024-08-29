@@ -3,18 +3,17 @@ import PropTypes from "prop-types";
 import Cookies from "js-cookie";
 
 const EditBookForm = ({ book, onSave, onCancel }) => {
-  // État pour gérer les données du formulaire
+  // Initialiser formData en fonction de la présence ou non de la prop book
   const [formData, setFormData] = useState({
-    id: book.id, // Ajouter l'ID du livre ici
-
-    titre: book.titre,
-    auteur: book.auteur,
-    editeur: book.editeur,
-    datePublication: book.datePublication,
-    description: book.description,
-    quantite: book.quantite,
-    prix: book.prix,
-    image: book.image,
+    // id: book?.id || '', // Laisser vide si book est null
+    titre: book?.titre || '',
+    auteur: book?.auteur || '',
+    editeur: book?.editeur || '',
+    datePublication: book?.datePublication || '',
+    description: book?.description || '',
+    quantite: book?.quantite || '',
+    prix: book?.prix || '',
+    image: book?.image || '',
   });
 
   // État pour gérer le chargement, les erreurs et les messages de succès
@@ -25,8 +24,14 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
   // Fonction pour gérer les changements dans les champs du formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ 
+      ...formData, 
+      [name]: name === "quantite" ? parseInt(value, 10) : value ,
+      [name]: name === "prix" ? parseFloat(value) : value 
+
+    });
   };
+  
 
   // Fonction pour sauvegarder les modifications
   const handleSave = async () => {
@@ -41,30 +46,32 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
         throw new Error("No token found");
       }
 
-      // Envoyer une requête PUT pour mettre à jour les détails du livre
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livre/edit/${book.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Inclure le token dans l'en-tête
-          },
-          body: JSON.stringify(formData), // Envoyer les données du formulaire en JSON
-        }
-      );
+      const url = book 
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livre/edit/${book.id}`
+        : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/livre/new`;
+
+      const method = book ? "PUT" : "POST";
+
+      // Envoyer une requête PUT pour l'édition ou POST pour l'ajout
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Inclure le token dans l'en-tête
+        },
+        body: JSON.stringify(formData), // Envoyer les données du formulaire en JSON
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
-      setSuccessMessage("Livre mis à jour avec succès!");
-      
+      setSuccessMessage(book ? "Livre mis à jour avec succès!" : "Livre ajouté avec succès!");
+
       if (onSave) onSave(formData);
 
-
     } catch (error) {
-      setError(`Une erreur est survenue lors de la mise à jour: ${error.message}`);
+      setError(`Une erreur est survenue: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -80,6 +87,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="titre"
           value={formData.titre}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -90,6 +98,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="auteur"
           value={formData.auteur}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -100,6 +109,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="editeur"
           value={formData.editeur}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -110,6 +120,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="datePublication"
           value={formData.datePublication}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -119,6 +130,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="description"
           value={formData.description}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -129,6 +141,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="quantite"
           value={formData.quantite}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -140,6 +153,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="prix"
           value={formData.prix}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-3">
@@ -150,6 +164,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
           name="image"
           value={formData.image}
           onChange={handleChange}
+          required
         />
       </div>
       <button
@@ -157,7 +172,7 @@ const EditBookForm = ({ book, onSave, onCancel }) => {
         onClick={handleSave}
         disabled={isLoading}
       >
-        {isLoading ? "Sauvegarde..." : "Sauvegarder"}
+        {isLoading ? "Sauvegarde..." : book ? "Sauvegarder les modifications" : "Ajouter le livre"}
       </button>
       <button
         className="btn btn-secondary mt-3 ms-2"
@@ -191,7 +206,7 @@ EditBookForm.propTypes = {
     quantite: PropTypes.number.isRequired,
     prix: PropTypes.number.isRequired,
     image: PropTypes.string,
-  }).isRequired,
+  }),
   onSave: PropTypes.func,
   onCancel: PropTypes.func,
 };
