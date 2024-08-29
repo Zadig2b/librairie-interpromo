@@ -94,8 +94,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/contact" className="text-white" style={{ textDecoration: "none" }}>
-                  Contact
+                <a href="/account" className="text-white" style={{ textDecoration: "none" }}>
+                  Mon compte
                 </a>
               </li>
             </ul>
