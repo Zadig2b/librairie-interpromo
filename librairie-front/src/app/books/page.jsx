@@ -4,7 +4,7 @@ import Filter from '@/components/Filter';
 import BookList from '@/components/BookList';
 import '@/app/books/page.css';
 import Pagination from '@/components/Pagination';
-
+import { useAuth } from '@/context/AuthContext';
 export default function BooksPage() {
   // State to hold book data
   const [books, setBooks] = useState([]);
