@@ -110,29 +110,37 @@ const BookDetails = ({ book }) => {
               <div><strong>Date de publication : </strong><span>{bookData.datePublication ? new Date(bookData.datePublication).getFullYear() : "N/A"}</span></div>
               <div><strong>Genre : </strong><span className="text-muted">Fantasy</span></div>
               <div><strong>Prix : </strong> ${bookData.prix.toFixed(2)}</div>
-              {!user?.isAdmin() && (
-                <button
-                  className="btn btn-primary mt-3"
-                  style={{
-                    backgroundColor: '#BFE4FF',
-                    border: '5px solid var(--primary-color)',
-                    borderRadius: '0',
-                    color: 'var(--primary-color)'
-                  }}
-                  onClick={handleOrder}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Processing..." : "Commander"}
-                </button>
-              )}
-              {user?.isAdmin() && (
-                <button
-                  className="btn btn-secondary mt-3"
-                  onClick={handleEditToggle}
-                >
-                  Éditer
-                </button>
-              )}
+              {user ? (
+  <>
+    {!user.isAdmin() && (
+      <button
+        className="btn btn-primary mt-3"
+        style={{
+          backgroundColor: '#BFE4FF',
+          border: '5px solid var(--primary-color)',
+          borderRadius: '0',
+          color: 'var(--primary-color)'
+        }}
+        onClick={handleOrder}
+        disabled={isLoading}
+      >
+        {isLoading ? "Processing..." : "Commander"}
+      </button>
+    )}
+    {user.isAdmin() && (
+      <button
+        className="btn btn-secondary mt-3"
+        onClick={handleEditToggle}
+      >
+        Éditer
+      </button>
+    )}
+  </>
+) : (
+  // Aucun utilisateur n'est connecté, donc aucun bouton n'est affiché.
+  null
+)}
+
             </>
           ) : (
             <EditBookForm

@@ -7,13 +7,15 @@ export default function HeroHeader() {
       className="heroHeader d-none d-md-block" 
       style={{ height: '500px', width: '100%', position: 'relative', overflow: 'hidden' }}
     >
-      <Image
-        src="/asset/Images/slide.jpeg" 
-        alt="Library Image"
-        layout="fill"
-        objectFit="cover" // Recadre l'image pour l'adapter au conteneur
-        className="me-2"
-      />
+<Image
+  src="/asset/Images/slide.jpeg" 
+  alt="Library Image"
+  fill
+  style={{ objectFit: "cover" }} // Recadre l'image pour l'adapter au conteneur
+  className="me-2"
+  priority
+/>
+
       <div
         style={{
           position: 'absolute',
