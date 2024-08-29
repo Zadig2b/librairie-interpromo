@@ -139,7 +139,7 @@ class BookFixtures extends Fixture
                 'categorie' => $polar
             ],
             [
-                'titre' => 'Double assassinat dans la rue Morgue / La lettre volée',
+                'titre' => 'Double assassinat dans la rue Morgue',
                 'auteur' => 'Edgar Allan Poe',
                 'editeur' => 'Folio Junior',
                 'datePublication' => new \DateTime('1841-01-01'),

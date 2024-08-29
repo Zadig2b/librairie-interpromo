@@ -88,16 +88,13 @@ const BookDetails = ({ book }) => {
           <h2>{bookData.titre}</h2>
         </div>
         <hr className="" style={{ border: "5px solid #BFE4FF" }} />
-        {/* <div className="col-md-4" style={{ position: 'relative', paddingLeft: '10px', paddingRight: '150px' }}>
-          {image && <img src={image} alt={titre} className="img-fluid" />}
-        </div> */}
+
         <div className="col-md-4">
           {bookData.image && (
             <img
               src={bookData.image}
               alt={bookData.titre}
               className="img-fluid"
-              style={{ width: "503px", height: "412px" }}
             />
           )}
         </div>
