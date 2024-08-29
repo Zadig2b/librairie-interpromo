@@ -11,18 +11,26 @@ export default function Filter({ books, categories, setFilteredBooks }) {
     const updatedSelectedCategories = selectedCategories.includes(category)
       ? selectedCategories.filter((c) => c !== category) // Remove if already selected
       : [...selectedCategories, category]; // Add if not selected
-
+  
     setSelectedCategories(updatedSelectedCategories);
-
+  
     const newFilteredBooks = updatedSelectedCategories.length === 0
       ? books // Show all books if no category is selected
-      : books.filter(book => updatedSelectedCategories.includes(book.categorie.nom));
-
+      : books.filter(book => book.categorie && book.categorie.nom && updatedSelectedCategories.includes(book.categorie.nom));
+  
     setFilteredBooks(newFilteredBooks);
   };
+  
 
   return (
-<div className="filter-section d-inline-block">
+<div className="filter-section d-inline-block"
+  style={{
+    position: 'fixed',
+    top: '200px', // Adjust as needed
+    left: '20px', // Adjust as needed
+    zIndex: '1000', // Ensures it stays on top of other elements
+  }}
+  >
 
       {/* Catégorie Filtre avec des cases à cocher */}
       <div className="filter-container">

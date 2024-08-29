@@ -5,7 +5,15 @@ import BookList from '@/components/BookList';
 import '@/app/books/page.css';
 import Pagination from '@/components/Pagination';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation'; // Import the useRouter hook
+
 export default function BooksPage() {
+  const router = useRouter(); // Initialize the router
+
+  const handleAddBookClick = () => {
+    router.push('/new-book'); // Navigate to the /add-book page
+  };
+
   // State to hold book data
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
@@ -76,8 +84,24 @@ export default function BooksPage() {
   return (
     <div className="book-section">
       <h1 className="section-title">Nos Livres</h1>
-      {/* Filter component */}
+
+     {/* Filter component */}
       <Filter books={books} categories={categories} setFilteredBooks={setFilteredBooks} />
+      {user?.isAdmin() && (
+  <button
+    className="btn btn-lg float-end"
+    style={{
+      backgroundColor: '#C6E6FE',
+      borderRadius: '0',
+      border: '2px solid black',
+    }}
+    onClick={handleAddBookClick}
+  >
+    Ajouter
+  </button>
+)}
+
+
 
       {/* BookList component */}
       <BookList type={allBooks} booksprops={currentBooks} categories={categories} handleDeleteBook={handleDeleteBook} />
