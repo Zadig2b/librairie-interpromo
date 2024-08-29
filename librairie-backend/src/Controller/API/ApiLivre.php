@@ -89,23 +89,23 @@ class ApiLivre extends AbstractController
     #[Route('/livre/delete/{id}', name: 'livre_delete', methods: ['DELETE'])]
     public function deleteBook(int $id, LivreRepository $livreRepository): JsonResponse
     {
-        // Retrieve the currently authenticated user
+        //Récupérer l'utilisateur actuellement authentifié
         $user = $this->tokenStorage->getToken()->getUser();
 
-        // Check if the user is authenticated and has the ROLE_ADMIN role
+        //Vérifiez si l'utilisateur est authentifié et dispose du rôle ROLE_ADMIN
         if (!$user || !in_array('ROLE_ADMIN', $user->getRoles())) {
             throw new AccessDeniedException('You do not have permission to delete this book.');
         }
 
-        // Find the book by its ID
+        //Rechercher le livre par son identifiant
         $livre = $livreRepository->find($id);
 
-        // If the book doesn't exist, return a 404 error
+        //Si le livre n'existe pas, renvoie une erreur 404
         if (!$livre) {
             return new JsonResponse(['error' => 'Book not found'], Response::HTTP_NOT_FOUND);
         }
 
-        // Remove the book from the database
+        //Supprimer le livre de la base de données
         $this->entityManager->remove($livre);
         $this->entityManager->flush();
 
@@ -120,15 +120,15 @@ class ApiLivre extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator
     ): JsonResponse {
-        // Retrieve the book by its ID
+        //Récupérer le livre par son identifiant
         $livre = $livreRepository->find($id);
 
-        // If the book doesn't exist, return a 404 error
+        //Si le livre n'existe pas, renvoie une erreur 404
         if (!$livre) {
             return new JsonResponse(['error' => 'Book not found'], Response::HTTP_NOT_FOUND);
         }
 
-        // Deserialize the request content to get the updated book data
+        //Désérialisez le contenu de la requête pour obtenir les données du livre mises à jour
         $updatedLivre = $serializer->deserialize(
             $request->getContent(),
             Livre::class,
@@ -136,7 +136,7 @@ class ApiLivre extends AbstractController
             ['groups' => 'api_livre_methods']
         );
 
-        // Update the book's properties
+        //Mettre à jour les propriétés du livre
         $livre->setTitre($updatedLivre->getTitre());
         $livre->setAuteur($updatedLivre->getAuteur());
         $livre->setEditeur($updatedLivre->getEditeur());
@@ -146,7 +146,7 @@ class ApiLivre extends AbstractController
         $livre->setPrix($updatedLivre->getPrix());
         $livre->setImage($updatedLivre->getImage());
 
-        // Validate the updated book data
+        //Valider les données du livre mises à jour
         $errors = $validator->validate($livre);
 
         if ($errors->count()) {
@@ -157,7 +157,7 @@ class ApiLivre extends AbstractController
             return $this->json($messages, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // Save the updated book
+        //Enregistrez le livre mis à jour
         $this->entityManager->flush();
 
         return $this->json(['message' => 'Book updated successfully'], Response::HTTP_OK);
