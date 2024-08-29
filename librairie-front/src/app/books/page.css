@@ -76,3 +76,51 @@ margin:15px;
 }
 /* Image  */
 
+/* Pagination */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  padding: 0;
+}
+
+.page-item {
+  display: flex;
+  align-items: center;
+}
+
+.page-link {
+  color: #000; /* Texte noir */
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+
+.page-item.active .page-link {
+  background-color: #007bff; /* Couleur de fond pour la page active */
+  color: #fff; /* Texte blanc pour la page active */
+  font-weight: bold;
+}
+
+.page-item.disabled .page-link {
+  cursor: not-allowed;
+  
+}
+
+.page-link svg {
+  fill: #A79A9C;
+}
+
+
+

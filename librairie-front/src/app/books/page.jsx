@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Filter from '@/components/Filter';
 import BookList from '@/components/BookList';
 import '@/app/books/page.css';
-import { useAuth } from '../../context/AuthContext'; // Importer le contexte d'authentification
 import Pagination from '@/components/Pagination';
 
 export default function BooksPage() {
