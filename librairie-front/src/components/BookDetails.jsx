@@ -92,10 +92,10 @@ const BookDetails = ({ book }) => {
           {image && <img src={image} alt={titre} className="img-fluid" />}
         </div> */}
         <div className="col-md-4">
-          {image && (
+          {bookData.image && (
             <img
-              src={image}
-              alt={titre}
+              src={bookData.image}
+              alt={bookData.titre}
               className="img-fluid"
               style={{ width: "503px", height: "412px" }}
             />
