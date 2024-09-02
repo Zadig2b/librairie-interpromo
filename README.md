@@ -12,7 +12,7 @@ Bienvenue dans le projet de librairie en ligne ! Ce projet permet de parcourir, 
 ## Prérequis
 - Node.js v14 ou supérieur
 - NPM ou Yarn
-- Un environnement backend (API) compatible avec JWT
+- Symfony 5.8 ou supérieur
 
 ## Installation
 ### 1. Clonez le dépôt :
@@ -24,11 +24,32 @@ allez dans le dossier clôné
 ```bash
 cd librairie-interpromo
 ```
-### 2. Installez les dépendances :
+
+### Initialisation Back-end:
+
+```bash
+cd librairie-backend
+```
+#### Installez les dépendances :
+```bash
+composer install
+```
+#### Lancer l'application
+Pour démarrer le serveur de développement, exécutez :
+```bash
+symfony server:start -d
+```
+L'application sera disponible sur http://localhost:8000.
+
+## Initialisation Front-end:
+```bash
+cd librairie-front
+```
+#### Installez les dépendances :
 ```bash
 npm install
 ```
-### Lancer l'application
+#### Lancer l'application
 Pour démarrer le serveur de développement, exécutez :
 ```bash
 npm run dev
@@ -39,6 +60,8 @@ L'application sera disponible sur http://localhost:3000.
 ```bash
 npm run build
 ```
+
+
 # 🧩 Structure du Projet
 /app : Contient les pages principales de l'application.
 /components : Contient les composants réutilisables de l'application.
